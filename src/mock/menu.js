@@ -3,6 +3,12 @@ const { config } = require('./common')
 const { apiPrefix } = config
 let database = [
   {
+    id: '0',
+    icon: 'laptop',
+    name: 'Welcome',
+    route: '/welcome',
+  },
+  {
     id: '1',
     icon: 'laptop',
     name: 'Dashboard',
@@ -16,18 +22,25 @@ let database = [
     route: '/user',
   },
   {
-    id: '7',
-    bpid: '1',
-    name: 'Posts',
-    icon: 'shopping-cart',
-    route: '/post',
-  },
-  {
     id: '21',
     mpid: '-1',
     bpid: '2',
     name: 'User Detail',
     route: '/user/:id',
+  },
+  {
+    id: '22',
+    bpid: '1',
+    name: '学员信息管理',
+    icon: 'user',
+    route: '/students',
+  },
+  {
+    id: '7',
+    bpid: '1',
+    name: 'Posts',
+    icon: 'shopping-cart',
+    route: '/post',
   },
   {
     id: '3',

@@ -22,6 +22,10 @@ const Routers = function ({ history, app }) {
       },
       childRoutes: [
         {
+          path: 'welcome',
+          component: require('routes/welcome'),
+        },
+        {
           path: 'dashboard',
           getComponent (nextState, cb) {
             require.ensure([], (require) => {
