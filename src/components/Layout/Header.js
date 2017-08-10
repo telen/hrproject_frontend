@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Menu, Icon, Popover } from 'antd'
+import { Menu, Icon, Popover, Dropdown } from 'antd'
 import classnames from 'classnames'
 import styles from './Header.less'
 import Menus from './Menu'
+import { config } from 'utils'
 
 const SubMenu = Menu.SubMenu
 
@@ -19,6 +20,15 @@ const Header = ({ user, logout, switchSider, siderFold, isNavbar, menuPopoverVis
     navOpenKeys,
     changeOpenKeys,
   }
+
+  const dropMenu = (
+    <Menu onClick={handleClickMenu}>
+      <Menu.Item key="logout">
+        登  出
+      </Menu.Item>
+    </Menu>
+  )
+
   return (
     <div className={styles.header}>
       {isNavbar
@@ -27,31 +37,13 @@ const Header = ({ user, logout, switchSider, siderFold, isNavbar, menuPopoverVis
             <Icon type="bars" />
           </div>
         </Popover>
-        : <div
-          className={styles.button}
-          onClick={switchSider}
-        >
-          <Icon type={classnames({ 'menu-unfold': siderFold, 'menu-fold': !siderFold })} />
-        </div>}
-      <div className={styles.rightWarpper}>
-        <div className={styles.button}>
-          <Icon type="mail" />
-        </div>
-        <Menu mode="horizontal" onClick={handleClickMenu}>
-          <SubMenu
-            style={{
-              float: 'right',
-            }}
-            title={<span>
-              <Icon type="user" />
-              {user.username}
-            </span>}
-          >
-            <Menu.Item key="logout">
-              Sign out
-            </Menu.Item>
-          </SubMenu>
-        </Menu>
+        : <h1 className={styles.title}>{config.name + config.namesub }</h1>}
+      <div className={styles.rightWrapper}>
+        <Dropdown overlay={dropMenu}>
+          <a className="antd-dropdown-link" href="#">
+            {user.username} <Icon type="down" />
+          </a>
+        </Dropdown>
       </div>
     </div>
   )

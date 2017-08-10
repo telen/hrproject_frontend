@@ -12,15 +12,25 @@
   position: relative;
   display: flex;
   justify-content: space-between;
-  height: 47px;
+  align-items: center;
+  height: 100px;
   background-color: #fff;
   z-index: 999;
+  background: url('/hbg.png') no-repeat;
+  background-size: cover;
 
-  .rightWarpper {
+  .rightWrapper {
     display: flex;
     padding-right: 16px;
+    height: 100%;
+    align-items: flex-end;
   }
 
+  .title {
+    margin-left: 24px;
+    font-weight: bold;
+    color: @text-color-jm;
+  }
   .button {
     width: 47px;
     height: 47px;
