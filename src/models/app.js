@@ -50,19 +50,23 @@ export default {
     * query ({
       payload,
     }, { call, put }) {
-      const { success, user } = yield call(query, payload)
-      if (success && user) {
-        const { list } = yield call(menusService.query)
-        const { permissions } = user
+      const { success, data, code } = yield call(query, payload)
+      const user = data
+      if (code === '000000' && user) {
+        const menus = yield call(menusService.query)
+        let { authorityList, role } = user
+
+        let list = menus.data
         let menu = list
-        if (permissions.role === EnumRoleType.ADMIN || permissions.role === EnumRoleType.DEVELOPER) {
-          permissions.visit = list.map(item => item.id)
+        if (role === EnumRoleType.ADMIN || role === EnumRoleType.DEVELOPER) { // 全部权限
+          authorityList = list.map(item => item.id)
         } else {
+
           menu = list.filter((item) => {
             const cases = [
-              permissions.visit.includes(item.id),
-              item.mpid ? permissions.visit.includes(item.mpid) || item.mpid === '-1' : true,
-              item.bpid ? permissions.visit.includes(item.bpid) : true,
+              authorityList.includes(item.id),
+              item.mpid ? authorityList.includes(item.mpid) || item.mpid === '-1' : true,
+              item.bpid ? authorityList.includes(item.bpid) : true,
             ]
             return cases.every(_ => _)
           })
@@ -71,12 +75,15 @@ export default {
           type: 'updateState',
           payload: {
             user,
-            permissions,
+            permissions: {
+              visit: authorityList,
+              role,
+            },
             menu,
           },
         })
         if (location.pathname === '/login') {
-          yield put(routerRedux.push('/dashboard'))
+          yield put(routerRedux.push('/welcome'))
         }
       } else if (config.openPages && config.openPages.indexOf(location.pathname) < 0) {
         let from = location.pathname

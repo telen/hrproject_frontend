@@ -41,7 +41,7 @@ const Header = ({ user, logout, switchSider, siderFold, isNavbar, menuPopoverVis
       <div className={styles.rightWrapper}>
         <Dropdown overlay={dropMenu}>
           <a className="antd-dropdown-link" href="#">
-            {user.username} <Icon type="down" />
+            {user.userName} <Icon type="down" />
           </a>
         </Dropdown>
       </div>

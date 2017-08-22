@@ -60,6 +60,18 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) =
       dataIndex: 'email',
       key: 'email',
     }, {
+      title: 'Email1',
+      dataIndex: 'email1',
+      key: 'email1',
+    }, {
+      title: 'Email2',
+      dataIndex: 'email2',
+      key: 'email2',
+    }, {
+      title: 'Email3',
+      dataIndex: 'email3',
+      key: 'email3',
+    }, {
       title: 'Address',
       dataIndex: 'address',
       key: 'address',

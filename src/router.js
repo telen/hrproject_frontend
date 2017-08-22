@@ -16,9 +16,9 @@ const Routers = function ({ history, app }) {
       component: App,
       getIndexRoute (nextState, cb) {
         require.ensure([], (require) => {
-          registerModel(app, require('models/dashboard'))
-          cb(null, { component: require('routes/dashboard/') })
-        }, 'dashboard')
+          // registerModel(app, require('models/dashboard'))
+          cb(null, { component: require('routes/welcome/') })
+        }, 'welcome')
       },
       childRoutes: [
         {
@@ -50,6 +50,23 @@ const Routers = function ({ history, app }) {
             }, 'user-detail')
           },
         }, {
+          path: 'student',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/student'))
+              registerModel(app, require('models/course'))
+              cb(null, require('routes/student/'))
+            }, 'student')
+          },
+        }, {
+          path: 'teacher',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/teacher'))
+              cb(null, require('routes/teacher/'))
+            }, 'student')
+          },
+        }, {
           path: 'login',
           getComponent (nextState, cb) {
             require.ensure([], (require) => {
@@ -63,6 +80,110 @@ const Routers = function ({ history, app }) {
             require.ensure([], (require) => {
               cb(null, require('routes/request/'))
             }, 'request')
+          },
+        }, {
+          path: 'class/course',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/course'))
+              cb(null, require('routes/clazz/course/'))
+            }, 'class-course')
+          },
+        }, {
+          path: 'class/room',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/room'))
+              cb(null, require('routes/clazz/room/'))
+            }, 'class-room')
+          },
+        }, {
+          path: 'class/application',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/application'))
+              cb(null, require('routes/clazz/application/'))
+            }, 'class-application')
+          },
+        }, {
+          path: 'attendance/record',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/record'))
+              cb(null, require('routes/attendance/record/'))
+            }, 'attendance-record')
+          },
+        }, {
+          path: 'attendance/statistic',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/attendance/statistic'))
+              cb(null, require('routes/attendance/statistic/'))
+            }, 'attendance-statistic')
+          },
+        }, {
+          path: 'graduate/statistic',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/graduate/statistic'))
+              cb(null, require('routes/graduate/statistic/'))
+            }, 'graduate-statistic')
+          },
+        }, {
+          path: 'agentMgt',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/agentMgt'))
+              cb(null, require('routes/agentMgt/'))
+            }, 'agentMgt')
+          },
+        }, {
+          path: 'classMgt',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/classMgt'))
+              cb(null, require('routes/classMgt/'))
+            }, 'classMgt')
+          },
+        }, {
+          path: 'attendanceMgt',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/attendanceMgt'))
+              cb(null, require('routes/attendanceMgt/'))
+            }, 'attendanceMgt')
+          },
+        }, {
+          path: 'inspection/inspectionBefore',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/inspection/before'))
+              cb(null, require('routes/inspection/before/'))
+            }, 'inspection-before')
+          },
+        }, {
+          path: 'inspection/inspectionInprogress',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/inspection/inprogress'))
+              cb(null, require('routes/inspection/inprogress/'))
+            }, 'inspection-before')
+          },
+        }, {
+          path: 'inspection/inspectionAfter',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/inspection/after'))
+              cb(null, require('routes/inspection/after/'))
+            }, 'inspection-before')
+          },
+        }, {
+          path: 'ledgerCheck',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/ledgerCheck'))
+              cb(null, require('routes/ledgerCheck/'))
+            }, 'ledgerCheck')
           },
         }, {
           path: 'UIElement/iconfont',

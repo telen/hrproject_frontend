@@ -9,19 +9,17 @@ export default {
   },
 
   effects: {
-    * login ({
-      payload,
-    }, { put, call }) {
+    * login ({ payload }, { put, call }) {
       yield put({ type: 'showLoginLoading' })
       const data = yield call(login, payload)
       yield put({ type: 'hideLoginLoading' })
-      if (data.success) {
+      if (data.data && data.data.code === '000000') {
         const from = queryURL('from')
         yield put({ type: 'app/query' })
         if (from) {
           yield put(routerRedux.push(from))
         } else {
-          yield put(routerRedux.push('/dashboard'))
+          yield put(routerRedux.push('/welcome'))
         }
       } else {
         throw data

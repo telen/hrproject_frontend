@@ -16,6 +16,12 @@ let usersListData = Mock.mock({
       isMale: '@boolean',
       email: '@email',
       createTime: '@datetime',
+      birthday: '@datetime',
+      'nationality|1': ['汉', '清', '蒙', '朝鲜'],
+      'education|1': ['高中及以下', '大专', '本科', '研究生', '博士', '博士后'],
+      'insurance|1': '@boolean',
+      'classname|1': ['厨师', '美容美发', '挖掘机', '钣金喷漆'],
+      agentName: /机构0\d{1}/,
       avatar () {
         return Mock.Random.image('100x100', Mock.Random.color(), '#757575', 'png', this.nickName.substr(0, 1))
       },
@@ -30,11 +36,24 @@ const EnumRoleType = {
   ADMIN: 'admin',
   DEFAULT: 'guest',
   DEVELOPER: 'developer',
+  AGENCT: 'agent',
+  OFFICER: 'officer',
 }
 
 const userPermission = {
   DEFAULT: {
-    visit: ['0', '1', '2', '21', '22', '7', '5', '51', '52', '53'],
+    visit: ['17081814132521025493','17081814132521025494','17081814132521025495','17081814132521025497','17081814132521025498','17081814132521025499','17081814132521025500','17081814132521025501','17081814132521025502','17081814132521025503','17081814132521025504','17081814132521025505','17081814132521025506','17081814132521025507','17081814132521025508','17081814132521025509','17081814132521025510','17081814132521025511','17081814132521025512',
+    '17081814132521025513', '17081814132521025514','17081814132521025515','17081814132521025516','17081814132521025517','17081814132521025518','17081814132521025519','17081814132521025520'],
+    role: EnumRoleType.DEFAULT,
+  },
+  AGENCT: {
+    visit: ['0', '1', '2', '21', '22', '31', '4', '41', '42', '43', '7', '5', '51', '52', '53', '54', '55',
+      '6', '61', '62', '63', '64', '65'],
+    role: EnumRoleType.DEFAULT,
+  },
+  OFFICER: {
+    visit: ['0',
+      'a1', 'a2', 'a3', 'a4', 'a41', 'a42', 'a43', 'a5'],
     role: EnumRoleType.DEFAULT,
   },
   ADMIN: {
@@ -52,15 +71,25 @@ const adminUsers = [
     password: 'admin',
     permissions: userPermission.ADMIN,
   }, {
-    id: 1,
+    id: 17081610203221032122,
     username: 'guest',
     password: 'guest',
     permissions: userPermission.DEFAULT,
   }, {
     id: 2,
-    username: '吴彦祖',
+    username: 'xxx',
     password: '123456',
     permissions: userPermission.DEVELOPER,
+  }, {
+    id: 17081610203221032123,
+    username: 'agent',
+    password: 'agent',
+    permissions: userPermission.AGENCT,
+  }, {
+    id: 17081610203221032124,
+    username: 'officer',
+    password: 'officer',
+    permissions: userPermission.OFFICER,
   },
 ]
 
@@ -98,10 +127,22 @@ module.exports = {
       const now = new Date()
       now.setDate(now.getDate() + 1)
       res.cookie('token', JSON.stringify({ id: user[0].id, deadline: now.getTime() }), {
-        maxAge: 900000,
+        maxAge: 24 * 60 * 60 * 1000,
         httpOnly: true,
       })
-      res.json({ success: true, message: 'Ok' })
+      // res.json({ success: true, message: 'Ok' })
+      res.status(200).json({
+            "code": "000000",
+            "message": "用户登录成功",
+            "data": {
+            "userId": "17081610203221032122",
+            "userName": "Mr.Monkey",
+            "role": "admin",
+            "authorityList": [
+              "17081610203221032567"
+              ]
+            }
+          })
     } else {
       res.status(400).end()
     }
@@ -112,7 +153,7 @@ module.exports = {
     res.status(200).end()
   },
 
-  [`GET ${apiPrefix}/user`] (req, res) {
+  [`GET ${apiPrefix}/user/query`] (req, res) {
     const cookie = req.headers.cookie || ''
     const cookies = qs.parse(cookie.replace(/\s/g, ''), { delimiter: ';' })
     const response = {}
@@ -128,12 +169,15 @@ module.exports = {
     if (response.success) {
       const userItem = adminUsers.filter(_ => _.id === token.id)
       if (userItem.length > 0) {
-        user.permissions = userItem[0].permissions
-        user.username = userItem[0].username
-        user.id = userItem[0].id
+        // user.authorityList = userItem[0].permissions
+        user.userName = userItem[0].username
+        user.userId = userItem[0].id
+        user.role = userItem[0].permissions.role
+        user.authorityList = userItem[0].permissions.visit
       }
     }
-    response.user = user
+    response.data = user
+    response.code = '000000'
     res.json(response)
   },
 
