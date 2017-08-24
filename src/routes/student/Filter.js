@@ -65,7 +65,7 @@ const Filter = ({
   const handleChange = (value) => {
     let fields = getFieldsValue()
     fields.courseId = value
-    console.log(value)
+
     onFilterChange(fields)
   }
 
@@ -87,7 +87,6 @@ const Filter = ({
       <Col span={4}>
         {getFieldDecorator('courseId', {
           initialValue: filter.courseId || '',
-          className: 'ant-input-affix-wrapper',
           rules: [
             {
               required: false,
@@ -95,6 +94,7 @@ const Filter = ({
           ],
         })(<Select
           onChange={handleChange}
+          allowClear={true}
           placeholder="请选择课程"
           className="ant-input-affix-wrapper">
           {

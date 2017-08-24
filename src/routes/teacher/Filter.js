@@ -40,7 +40,7 @@ const Filter = ({
 
   const handleSubmit = () => {
     let fields = getFieldsValue()
-    console.log(fields)
+
     onFilterChange(fields)
   }
 
@@ -82,7 +82,7 @@ const Filter = ({
         <Button icon="reload" style={{ marginRight: 16 }} onClick={handleSubmit}>刷新</Button>
       </Col>
       <Col span={4}>
-        {getFieldDecorator('agentName', { initialValue: agentName })(<Search placeholder="搜索机构名称" onSearch={handleSubmit} />)}
+        {getFieldDecorator('name', { initialValue: filter.name })(<Search placeholder="搜索教师名字" onSearch={handleSubmit} />)}
       </Col>
     </Row>
   )

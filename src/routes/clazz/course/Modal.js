@@ -24,6 +24,7 @@ const dateFormat = 'YYYY-MM-DD'
 const modal = ({
   item = {},
   onOk,
+  teacher,
   form: {
     getFieldDecorator,
     validateFields,
@@ -100,7 +101,11 @@ const modal = ({
                       required: true,
                     },
                   ],
-                })(<Input />)}
+                })(<Select>
+                  {teacher.list.map((itemc) => {
+                    return <Option key={itemc.teacherId} value={itemc.teacherId}>{itemc.name}</Option>
+                  })}
+                </Select>)}
               </FormItem>
             </Col>
             <Col span={8}>
@@ -211,6 +216,7 @@ modal.propTypes = {
   type: PropTypes.string,
   item: PropTypes.object,
   onOk: PropTypes.func,
+  teacher: PropTypes.object,
 }
 
 export default Form.create()(modal)

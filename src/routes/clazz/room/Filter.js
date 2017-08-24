@@ -2,9 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import { FilterItem } from 'components'
-import { Form, Button, Row, Col, Input } from 'antd'
+import { Form, Button, Row, Col, Input, Select } from 'antd'
 
 const Search = Input.Search
+const Option = Select.Option
 
 const ColProps = {
   xs: 24,
@@ -23,6 +24,7 @@ const Filter = ({
   onAdd,
   onFilterChange,
   onDeleteItems,
+  course,
   filter,
   form: {
     getFieldDecorator,
@@ -59,9 +61,9 @@ const Filter = ({
     handleSubmit()
   }
 
-  const handleChange = (key, values) => {
+  const handleChange = (value) => {
     let fields = getFieldsValue()
-    fields[key] = values
+    fields.courseId = value
     onFilterChange(fields)
   }
   const { agentName } = filter
@@ -82,7 +84,17 @@ const Filter = ({
         <Button icon="reload" style={{ marginRight: 16 }} onClick={handleSubmit}>刷新</Button>
       </Col>
       <Col span={4}>
-        {getFieldDecorator('agentName', { initialValue: agentName })(<Search placeholder="搜索机构名称" onSearch={handleSubmit} />)}
+        {getFieldDecorator('courseId', { initialValue: filter.courseId })(<Select
+          allowClear={true}
+          onChange={handleChange}
+          placeholder="请选择课程"
+          className="ant-input-affix-wrapper">
+          {
+            course.list.map((item) => {
+              return <Option key={item.courseId} value={item.courseId}>{item.courseName}</Option>
+            })
+          }
+        </Select>)}
       </Col>
     </Row>
   )
@@ -94,6 +106,7 @@ Filter.propTypes = {
   filter: PropTypes.object,
   onFilterChange: PropTypes.func,
   onDeleteItems: PropTypes.func,
+  course: PropTypes.object,
 }
 
 export default Form.create()(Filter)

@@ -134,10 +134,11 @@ const AgentMgt = ({ location, dispatch, agentMgt, loading }) => {
   }
 
   const ModalGen = () => <Modal {...modalProps} />
+  const FilterGen = () => <Filter {...filterProps} />
 
   return (
     <div className="content-inner">
-      <Filter {...filterProps} />
+      <FilterGen />
       {
         -1 > 0 &&
         <Row style={{ marginBottom: 24, textAlign: 'right', fontSize: 13 }}>

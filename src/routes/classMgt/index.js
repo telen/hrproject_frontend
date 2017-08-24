@@ -7,12 +7,13 @@ import List from './List'
 import Filter from './Filter'
 import Modal from './Modal'
 
-const ClassMgt = ({ location, dispatch, classMgt, loading }) => {
+const ClassMgt = ({ location, dispatch, classMgt, loading, agentMgt }) => {
   const { list, pagination, currentItem, modalVisible, modalType, isMotion, selectedRowKeys } = classMgt
   const { pageSize } = pagination
 
   const listProps = {
     dataSource: list,
+    agentMgt,
     loading: loading.effects['classMgt/query'],
     pagination,
     location,
@@ -30,34 +31,51 @@ const ClassMgt = ({ location, dispatch, classMgt, loading }) => {
     },
     onDeleteItem (id) {
       dispatch({
-        type: 'user/delete',
+        type: 'classMgt/delete',
         payload: id,
       })
     },
     onEditItem (item) {
       dispatch({
-        type: 'user/showModal',
+        type: 'classMgt/showModal',
         payload: {
           modalType: 'update',
           currentItem: item,
         },
       })
     },
-    rowSelection: {
-      selectedRowKeys,
-      onChange: (keys) => {
-        dispatch({
-          type: 'classMgt/updateState',
-          payload: {
-            selectedRowKeys: keys,
-          },
-        })
-      },
+    onPassItem (key) {
+      dispatch({
+        type: 'classMgt/pass',
+        payload: {
+          flowId: key,
+        },
+      })
     },
+    onRejectItem (key) {
+      dispatch({
+        type: 'classMgt/reject',
+        payload: {
+          flowId: key,
+        },
+      })
+    },
+    // rowSelection: {
+    //   selectedRowKeys,
+    //   onChange: (keys) => {
+    //     dispatch({
+    //       type: 'classMgt/updateState',
+    //       payload: {
+    //         selectedRowKeys: keys,
+    //       },
+    //     })
+    //   },
+    // },
   }
 
   const filterProps = {
     isMotion,
+    agentMgt,
     filter: {
       ...location.query,
     },
@@ -160,6 +178,7 @@ ClassMgt.propTypes = {
   location: PropTypes.object,
   dispatch: PropTypes.func,
   loading: PropTypes.object,
+  agentMgt: PropTypes.object,
 }
 
-export default connect(({ classMgt, loading }) => ({ classMgt, loading }))(ClassMgt)
+export default connect(({ classMgt, loading, agentMgt }) => ({ classMgt, loading, agentMgt }))(ClassMgt)

@@ -29,6 +29,7 @@ module.exports = {
     student: `${APIV1}/student`,
     course: `${APIV1}/course`,
     room: `${APIV1}/class`,
+    audit: `${APIV1}/audit`,
     attendanceRecord: `${APIV1}/attendance`,
   },
 }

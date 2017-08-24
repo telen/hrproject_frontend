@@ -1,10 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Form, Input, InputNumber, Radio, Modal, Cascader, Icon,
-  Row, Col, Select, DatePicker, Button } from 'antd'
+import { Form, Input, InputNumber, Table, Tag, Modal, Icon,
+  Row, Col, Select, DatePicker, message } from 'antd'
 import styles from './List.less'
 import moment from 'moment'
 import city from '../../../utils/city'
+
+import { classnames, config } from 'utils'
 
 const Option = Select.Option
 
@@ -22,8 +24,14 @@ const formItemLayout = {
 const dateFormat = 'YYYY-MM-DD'
 
 const modal = ({
+  modalType,
   item = {},
+  course,
+  student,
+  rowSelection,
+  selectedRowKeysOfStudent,
   onOk,
+  onCourseChange,
   form: {
     getFieldDecorator,
     validateFields,
@@ -45,13 +53,78 @@ const modal = ({
       data.onClassTime = data.onClassTime.valueOf()
       data.offClassTime = data.offClassTime.valueOf()
 
+      if (selectedRowKeysOfStudent.length === 0) {
+        message.error('请选择学生')
+        return
+      }
+      data.studentIds = selectedRowKeysOfStudent
       onOk(data)
     })
   }
 
-  const modalOpts = {
+  let modalOpts = {
     ...modalProps,
     onOk: handleOk,
+  }
+  if (modalType === 'view') {
+    modalOpts = {
+      ...modalProps,
+      footer: null,
+    }
+  }
+
+  const columns = [
+    {
+      title: '学生编号',
+      dataIndex: 'studentId',
+      key: 'studentId',
+    }, {
+      title: '学员姓名',
+      dataIndex: 'studentName',
+      key: 'studentName',
+    }, {
+      title: '学员性别',
+      dataIndex: 'gender',
+      key: 'gender',
+      render: text => (<span>{text === '0'
+        ? '男'
+        : '女'}</span>),
+    }, {
+      title: '学员生日',
+      dataIndex: 'birthday',
+      key: 'birthday',
+      render: text => moment(text).format(dateFormat),
+    }, {
+      title: '学员学历',
+      dataIndex: 'education',
+      key: 'education',
+    }, {
+      title: '联系手机',
+      dataIndex: 'mobile',
+      key: 'mobile',
+    }, {
+      title: '联系邮箱',
+      dataIndex: 'email',
+      key: 'email',
+    }, {
+      title: '参保状态',
+      dataIndex: 'insuredStatus',
+      key: 'insuredStatus',
+      render: (text, record) => <Tag color={text ? '#acd4f3' : '#EE7D19'}>{ text === 0 ? '已参保' : '未参保'}</Tag>,
+    }, {
+      title: '所属课程',
+      dataIndex: 'courseId',
+      key: 'courseId',
+      render: (text) => {
+        const courseItem = course.list.filter((itemc) => { return itemc.courseId === text })
+
+        return courseItem[0] ? courseItem[0].courseName : text
+      },
+    },
+  ]
+
+  const handleChange = (value) => {
+    onCourseChange(value)
   }
 
   return (
@@ -93,7 +166,11 @@ const modal = ({
                       required: true,
                     },
                   ],
-                })(<Input />)}
+                })(<Select onChange={handleChange} allowClear={true} >
+                  {course.list.map((itemc) => {
+                    return <Option key={itemc.courseId} value={itemc.courseId}>{itemc.courseName}</Option>
+                  })}
+                </Select>)}
               </FormItem>
             </Col>
             <Col span={8}>
@@ -225,8 +302,16 @@ const modal = ({
         </div>
 
         <p className={styles.formLabel}><Icon type="file-text" /> 学员信息</p>
-        <div className={styles.formFields}>
-
+        <div className={classnames(styles.formFields, styles.formTable)}>
+          <Table
+            dataSource={student.list}
+            rowSelection={rowSelection}
+            bordered
+            columns={columns}
+            simple
+            size="small"
+            rowKey={record => record.studentId}
+          />
         </div>
 
       </Form>
@@ -239,6 +324,12 @@ modal.propTypes = {
   type: PropTypes.string,
   item: PropTypes.object,
   onOk: PropTypes.func,
+  course: PropTypes.object,
+  student: PropTypes.object,
+  rowSelection: PropTypes.object,
+  onCourseChange: PropTypes.func,
+  selectedRowKeysOfStudent: PropTypes.array,
+  modalType: PropTypes.string,
 }
 
 export default Form.create()(modal)

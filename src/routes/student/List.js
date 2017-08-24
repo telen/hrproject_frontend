@@ -27,14 +27,18 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, course, ...tablePr
 
   const columns = [
     {
-      title: '学员编号',
+      title: '学生编号',
+      dataIndex: 'studentId',
+      key: 'studentId',
+    },
+    {
+      title: '身份证号',
       dataIndex: 'idNumber',
       key: 'idNumber',
     }, {
       title: '学员姓名',
       dataIndex: 'studentName',
       key: 'studentName',
-      render: (text, record) => <Link to={`user/${record.id}`}>{text}</Link>,
     }, {
       title: '学员性别',
       dataIndex: 'gender',
@@ -76,7 +80,7 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, course, ...tablePr
         const courseItem = course.list.filter((item) => { return item.courseId === text })
 
         return courseItem[0] ? courseItem[0].courseName : text
-      }
+      },
     }, {
       title: '操作',
       key: 'operation',
@@ -85,7 +89,7 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, course, ...tablePr
         const drop = <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: 'Update' }, { key: '2', name: 'Delete' }]} />
         return (
           <div className={styles.menuwrap}>
-            <a onClick={(e) => handleMenuClick(record, { key: '1'})}>编辑</a>
+            <a onClick={(e) => handleMenuClick(record, { key: '1' })}>编辑</a>
 
           </div>
         )

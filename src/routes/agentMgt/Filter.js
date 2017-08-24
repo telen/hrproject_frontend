@@ -64,7 +64,7 @@ const Filter = ({
     fields[key] = values
     onFilterChange(fields)
   }
-  const { agentName } = filter
+
 
   let initialCreateTime = []
   if (filter.createTime && filter.createTime[0]) {
@@ -82,7 +82,7 @@ const Filter = ({
         <Button icon="reload" style={{ marginRight: 16 }} onClick={handleSubmit}>刷新</Button>
       </Col>
       <Col span={4}>
-        {getFieldDecorator('agentName', { initialValue: agentName })(<Search placeholder="搜索机构名称" onSearch={handleSubmit} />)}
+        {getFieldDecorator('agencyName', { initialValue: filter.agencyName })(<Search placeholder="搜索机构名称" onSearch={handleSubmit} />)}
       </Col>
     </Row>
   )

@@ -1,11 +1,11 @@
 /* global window */
 import modelExtend from 'dva-model-extend'
 import { config } from 'utils'
-import { create, remove, update } from 'services/user'
+import { create, remove, update, query } from 'services/room'
 import * as usersService from 'services/users'
 import { pageModel } from './common'
 
-const { query } = usersService
+// const { query } = usersService
 const { prefix } = config
 
 export default modelExtend(pageModel, {
@@ -63,7 +63,7 @@ export default modelExtend(pageModel, {
     },
 
     * multiDelete ({ payload }, { call, put }) {
-      const data = yield call(usersService.remove, payload)
+      const data = yield call(remove, payload)
       if (data.success) {
         yield put({ type: 'updateState', payload: { selectedRowKeys: [] } })
         yield put({ type: 'query' })
@@ -83,9 +83,7 @@ export default modelExtend(pageModel, {
     },
 
     * update ({ payload }, { select, call, put }) {
-      const id = yield select(({ user }) => user.currentItem.id)
-      const newUser = { ...payload, id }
-      const data = yield call(update, newUser)
+      const data = yield call(update, payload)
       if (data.success) {
         yield put({ type: 'hideModal' })
         yield put({ type: 'query' })

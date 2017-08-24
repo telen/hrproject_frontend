@@ -40,7 +40,7 @@ const Filter = ({
 
   const handleSubmit = () => {
     let fields = getFieldsValue()
-    console.log(fields)
+
     onFilterChange(fields)
   }
 
@@ -64,7 +64,6 @@ const Filter = ({
     fields[key] = values
     onFilterChange(fields)
   }
-  const { agentName } = filter
 
   let initialCreateTime = []
   if (filter.createTime && filter.createTime[0]) {
@@ -78,11 +77,10 @@ const Filter = ({
     <Row gutter={24} type="flex" justify="space-between">
       <Col {...ColProps} >
 
-        <Button icon="delete" style={{ marginRight: 16 }} onClick={onDeleteItems} >批量删除</Button>
         <Button icon="reload" style={{ marginRight: 16 }} onClick={handleSubmit}>刷新</Button>
       </Col>
       <Col span={4}>
-        {getFieldDecorator('agentName', { initialValue: agentName })(<Search placeholder="搜索机构名称" onSearch={handleSubmit} />)}
+        {getFieldDecorator('classname', { initialValue: filter.classname })(<Search placeholder="搜索班级名字" onSearch={handleSubmit} />)}
       </Col>
     </Row>
   )

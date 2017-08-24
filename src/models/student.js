@@ -28,6 +28,13 @@ export default modelExtend(pageModel, {
             type: 'query',
             payload: location.query,
           })
+        } else if (location.pathname === '/class/room') {
+          dispatch({
+            type: 'query',
+            payload: {
+              pageSize: 10000,
+            },
+          })
         }
       })
     },

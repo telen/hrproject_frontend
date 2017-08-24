@@ -5,8 +5,9 @@ const mockList = require('./mockList')
 const { apiPrefix } = config
 let database = posts
 
-const host = '192.168.199.220:8080'
-const enableMock = false
+const hostqx = '192.168.199.220:8080'
+const host = '192.168.199.152:8080'
+const enableMock = true
 
 module.exports = {
   [`POST ${apiPrefix}/class/new`] (req, res) {
@@ -85,6 +86,127 @@ module.exports = {
           res.json({ ret: false })
         })
     }
+  },
 
+  [`POST ${apiPrefix}/class/apply`] (req, res) {
+    if (enableMock) {
+      res.status(200).json({
+        code: '000000',
+        success: 'success',
+      })
+    } else {
+      axios.defaults.headers.Cookie = req.headers.cookie
+      axios.post(`http://${host}${apiPrefix}/class/apply`, req.body)
+        .then(function (response) {
+          res.json(response.data)
+        })
+        .catch(function (error) {
+          console.error(error)
+          res.json({ ret: false })
+        })
+    }
+  },
+
+  [`POST ${apiPrefix}/class/pass`] (req, res) {
+    if (enableMock) {
+      res.status(200).json({
+        code: '000000',
+        success: 'success',
+      })
+    } else {
+      axios.defaults.headers.Cookie = req.headers.cookie
+      axios.post(`http://${host}${apiPrefix}/class/pass`, req.body)
+        .then(function (response) {
+          res.json(response.data)
+        })
+        .catch(function (error) {
+          console.error(error)
+          res.json({ ret: false })
+        })
+    }
+  },
+
+  [`POST ${apiPrefix}/class/reject`] (req, res) {
+    if (enableMock) {
+      res.status(200).json({
+        code: '000000',
+        success: 'success',
+      })
+    } else {
+      axios.defaults.headers.Cookie = req.headers.cookie
+      axios.post(`http://${host}${apiPrefix}/class/reject`, req.body)
+        .then(function (response) {
+          res.json(response.data)
+        })
+        .catch(function (error) {
+          console.error(error)
+          res.json({ ret: false })
+        })
+    }
+  },
+
+  [`GET ${apiPrefix}/audit/manager/classAudit`] (req, res) {
+    const { query } = req
+    let { pageSize, page, ...other } = query
+    pageSize = pageSize || 10
+    page = page || 1
+
+    if (enableMock) {
+      res.status(200).json({
+        code: '000000',
+        data: mockList.data.slice((page - 1) * pageSize, page * pageSize),
+        total: mockList.data.length,
+      })
+    } else {
+      axios.defaults.headers.Cookie = req.headers.cookie
+      axios.get(`http://${host}${apiPrefix}/audit/manager/classAudit`, {
+        params: req.query,
+      })
+        .then(function (response) {
+          res.json(response.data)
+        })
+        .catch(function (error) {
+          console.error(error)
+          res.json({ ret: false })
+        })
+    }
+  },
+
+  [`POST ${apiPrefix}/audit/pass`] (req, res) {
+    if (enableMock) {
+      res.status(200).json({
+        code: '000000',
+        success: 'success',
+      })
+    } else {
+      axios.defaults.headers.Cookie = req.headers.cookie
+      axios.post(`http://${host}${apiPrefix}/audit/pass`, req.body)
+        .then(function (response) {
+          res.json(response.data)
+        })
+        .catch(function (error) {
+          console.error(error)
+          res.json({ ret: false })
+        })
+    }
+  },
+
+  [`POST ${apiPrefix}/audit/reject`] (req, res) {
+    if (enableMock) {
+      res.status(200).json({
+        code: '000000',
+        success: 'success',
+      })
+    } else {
+      axios.defaults.headers.Cookie = req.headers.cookie
+      axios.post(`http://${host}${apiPrefix}/audit/reject`, req.body)
+        .then(function (response) {
+          res.json(response.data)
+        })
+        .catch(function (error) {
+          console.error(error)
+          res.json({ ret: false })
+        })
+    }
   },
 }

@@ -11,17 +11,19 @@ import moment from 'moment'
 const dateFormat = 'YYYY-MM-DD'
 const confirm = Modal.confirm
 
-const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) => {
+const List = ({ onDeleteItem, onEditItem, onApplyItem, isMotion, location, course, ...tableProps }) => {
   const handleMenuClick = (record, e) => {
     if (e.key === '1') {
-      onEditItem(record)
+      onEditItem(record, true)
     } else if (e.key === '2') {
       confirm({
-        title: 'Are you sure delete this record?',
+        title: '确定提交申请吗?',
         onOk () {
-          onDeleteItem(record.id)
+          onApplyItem(record.classId)
         },
       })
+    } else if (e.key === '3') {
+      onEditItem(record, false)
     }
   }
 
@@ -46,6 +48,11 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) =
       title: '所属课程',
       dataIndex: 'course',
       key: 'course',
+      render: (text) => {
+        const courseItem = course.list.filter((item) => { return item.courseId === text })
+
+        return courseItem[0] ? courseItem[0].courseName : text
+      },
     }, {
       title: '所属专业',
       dataIndex: 'affiliatedProfession',
@@ -73,18 +80,47 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) =
       dataIndex: 'proposerMobile',
       key: 'proposerMobile',
     }, {
+      title: '申请状态',
+      dataIndex: 'status',
+      key: 'status',
+      render: (text) => {
+        let t = '新建'
+        switch (text) {
+          case 0:
+            t = '新建'
+            break
+          case 1:
+            t = '待审核'
+            break
+          case 2:
+            t = '审核通过'
+            break
+          case 3:
+            t = '驳回'
+            break
+          default:
+            t = '未知'
+        }
+        return t
+      },
+    }, {
       title: '操作',
       key: 'operation',
       width: 100,
       render: (text, record) => {
         const drop = <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: 'Update' }, { key: '2', name: 'Delete' }]} />
-        return (
-          <div className={styles.menuwrap}>
+        let op = null
+        if (record.status === 0) {
+          op = (<div className={styles.menuwrap}>
             <a onClick={e => handleMenuClick(record, { key: '1' })}>编辑</a>
-            <a>申请</a>
-
-          </div>
-        )
+            <a onClick={e => handleMenuClick(record, { key: '2' })}>申请</a>
+          </div>)
+        } else {
+          op = (<div className={styles.menuwrap}>
+            <a onClick={e => handleMenuClick(record, { key: '3' })}>查看</a>
+          </div>)
+        }
+        return op
       },
     },
   ]
@@ -116,6 +152,8 @@ List.propTypes = {
   onEditItem: PropTypes.func,
   isMotion: PropTypes.bool,
   location: PropTypes.object,
+  course: PropTypes.object,
+  onApplyItem: PropTypes.func,
 }
 
 export default List

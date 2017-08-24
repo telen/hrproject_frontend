@@ -28,6 +28,13 @@ export default modelExtend(pageModel, {
             type: 'query',
             payload: location.query,
           })
+        } else if (location.pathname === '/classMgt') {
+          dispatch({
+            type: 'query',
+            payload: {
+              pageSize: 10000,
+            },
+          })
         }
       })
     },
@@ -91,7 +98,7 @@ export default modelExtend(pageModel, {
       // const id = yield select(({ user }) => user.currentItem.id)
       // const newUser = { ...payload, id }
       const data = yield call(update, payload)
-      console.log(data)
+
       if (data.code === '000000') {
         yield put({ type: 'hideModal' })
         yield put({ type: 'query' })

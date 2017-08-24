@@ -1,11 +1,10 @@
 /* global window */
 import modelExtend from 'dva-model-extend'
 import { config } from 'utils'
-import { create, remove, update } from 'services/user'
+import { create, remove, update, query, reject, pass } from 'services/audit'
 import * as usersService from 'services/users'
 import { pageModel } from './common'
 
-const { query } = usersService
 const { prefix } = config
 
 export default modelExtend(pageModel, {
@@ -65,8 +64,8 @@ export default modelExtend(pageModel, {
     },
 
     * multiDelete ({ payload }, { call, put }) {
-      const data = yield call(usersService.remove, payload)
-      if (data.success) {
+      const data = yield call(remove, payload)
+      if (data.code === '000000') {
         yield put({ type: 'updateState', payload: { selectedRowKeys: [] } })
         yield put({ type: 'query' })
       } else {
@@ -76,7 +75,7 @@ export default modelExtend(pageModel, {
 
     * create ({ payload }, { call, put }) {
       const data = yield call(create, payload)
-      if (data.success) {
+      if (data.code === '000000') {
         yield put({ type: 'hideModal' })
         yield put({ type: 'query' })
       } else {
@@ -85,11 +84,27 @@ export default modelExtend(pageModel, {
     },
 
     * update ({ payload }, { select, call, put }) {
-      const id = yield select(({ user }) => user.currentItem.id)
-      const newUser = { ...payload, id }
-      const data = yield call(update, newUser)
-      if (data.success) {
+      const data = yield call(update, payload)
+      if (data.code === '000000') {
         yield put({ type: 'hideModal' })
+        yield put({ type: 'query' })
+      } else {
+        throw data
+      }
+    },
+
+    * pass ({ payload }, { call, put }) {
+      const data = yield call(pass, payload)
+      if (data.code === '000000') {
+        yield put({ type: 'query' })
+      } else {
+        throw data
+      }
+    },
+
+    * reject ({ payload }, { call, put }) {
+      const data = yield call(reject, payload)
+      if (data.code === '000000') {
         yield put({ type: 'query' })
       } else {
         throw data

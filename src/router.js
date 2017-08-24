@@ -86,6 +86,7 @@ const Routers = function ({ history, app }) {
           getComponent (nextState, cb) {
             require.ensure([], (require) => {
               registerModel(app, require('models/course'))
+              registerModel(app, require('models/teacher'))
               cb(null, require('routes/clazz/course/'))
             }, 'class-course')
           },
@@ -94,6 +95,8 @@ const Routers = function ({ history, app }) {
           getComponent (nextState, cb) {
             require.ensure([], (require) => {
               registerModel(app, require('models/room'))
+              registerModel(app, require('models/course'))
+              registerModel(app, require('models/student'))
               cb(null, require('routes/clazz/room/'))
             }, 'class-room')
           },
@@ -110,6 +113,7 @@ const Routers = function ({ history, app }) {
           getComponent (nextState, cb) {
             require.ensure([], (require) => {
               registerModel(app, require('models/record'))
+              registerModel(app, require('models/room'))
               cb(null, require('routes/attendance/record/'))
             }, 'attendance-record')
           },
@@ -142,6 +146,7 @@ const Routers = function ({ history, app }) {
           getComponent (nextState, cb) {
             require.ensure([], (require) => {
               registerModel(app, require('models/classMgt'))
+              registerModel(app, require('models/agentMgt'))
               cb(null, require('routes/classMgt/'))
             }, 'classMgt')
           },
@@ -158,6 +163,7 @@ const Routers = function ({ history, app }) {
           getComponent (nextState, cb) {
             require.ensure([], (require) => {
               registerModel(app, require('models/inspection/before'))
+              registerModel(app, require('models/course'))
               cb(null, require('routes/inspection/before/'))
             }, 'inspection-before')
           },

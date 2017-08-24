@@ -9,7 +9,7 @@ import styles from './List.less'
 
 const confirm = Modal.confirm
 
-const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) => {
+const List = ({ onDeleteItem, onEditItem, isMotion, location, teacher, ...tableProps }) => {
   const handleMenuClick = (record, e) => {
     if (e.key === '1') {
       onEditItem(record)
@@ -56,6 +56,12 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) =
       title: '教师姓名',
       dataIndex: 'teacherId',
       key: 'teacherId',
+      render: (text) => {
+        const teacherItem = teacher.list.filter((item) => {
+          return item.teacherId === text
+        })
+        return teacherItem[0] ? teacherItem[0].name : text
+      }
     }, {
       title: '行业类别',
       dataIndex: 'industryCategory',
@@ -68,10 +74,6 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) =
       title: '培训工种',
       dataIndex: 'trainingJobs',
       key: 'trainingJobs',
-    }, {
-      title: '所属机构',
-      dataIndex: 'agencyId',
-      key: 'agencyId',
     }, {
       title: '操作',
       key: 'operation',
@@ -115,6 +117,7 @@ List.propTypes = {
   onEditItem: PropTypes.func,
   isMotion: PropTypes.bool,
   location: PropTypes.object,
+  teacher: PropTypes.object,
 }
 
 export default List

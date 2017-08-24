@@ -17,6 +17,7 @@ module.exports = {
 
     if (enableMock) {
       res.status(200).json({
+        code: '000000',
         data: mockList.data.slice((page - 1) * pageSize, page * pageSize),
         total: mockList.data.length,
       })
@@ -40,6 +41,7 @@ module.exports = {
 
     if (enableMock) {
       res.status(200).json({
+        code: '000000',
         data: mockList.data.slice((page - 1) * pageSize, page * pageSize),
         total: mockList.data.length,
       })
@@ -84,6 +86,5 @@ module.exports = {
           res.json({ ret: false })
         })
     }
-
   },
 }

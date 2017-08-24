@@ -7,7 +7,7 @@ import List from './List'
 import Filter from './Filter'
 import Modal from './Modal'
 
-const Course = ({ location, dispatch, course, loading }) => {
+const Course = ({ location, dispatch, course, loading, teacher }) => {
   const { list, pagination, currentItem, modalVisible, modalType, isMotion, selectedRowKeys } = course
   const { pageSize } = pagination
 
@@ -17,6 +17,7 @@ const Course = ({ location, dispatch, course, loading }) => {
     pagination,
     location,
     isMotion,
+    teacher,
     onChange (page) {
       const { query, pathname } = location
       dispatch(routerRedux.push({
@@ -58,6 +59,7 @@ const Course = ({ location, dispatch, course, loading }) => {
 
   const filterProps = {
     isMotion,
+    teacher,
     filter: {
       ...location.query,
     },
@@ -106,6 +108,7 @@ const Course = ({ location, dispatch, course, loading }) => {
   const modalProps = {
     item: modalType === 'create' ? {} : currentItem,
     width: 1000,
+    teacher,
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['course/update'],
@@ -134,10 +137,11 @@ const Course = ({ location, dispatch, course, loading }) => {
   }
 
   const ModalGen = () => <Modal {...modalProps} />
+  const FilterGen = () => <Filter {...filterProps} />
 
   return (
     <div className="content-inner">
-      <Filter {...filterProps} />
+      <FilterGen />
       {
         -1 > 0 &&
         <Row style={{ marginBottom: 24, textAlign: 'right', fontSize: 13 }}>
@@ -160,6 +164,7 @@ Course.propTypes = {
   location: PropTypes.object,
   dispatch: PropTypes.func,
   loading: PropTypes.object,
+  teacher: PropTypes.object,
 }
 
-export default connect(({ course, loading }) => ({ course, loading }))(Course)
+export default connect(({ course, loading, teacher }) => ({ course, loading, teacher }))(Course)

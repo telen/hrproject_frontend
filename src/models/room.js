@@ -1,8 +1,8 @@
 /* global window */
 import modelExtend from 'dva-model-extend'
 import { config } from 'utils'
-import { create, remove, update, query } from 'services/room'
-import * as usersService from 'services/users'
+import { create, remove, update, query, apply } from 'services/room'
+import * as studentService from 'services/student'
 import { pageModel } from './common'
 
 // const { query } = usersService
@@ -16,6 +16,7 @@ export default modelExtend(pageModel, {
     modalVisible: false,
     modalType: 'create',
     selectedRowKeys: [],
+    selectedRowKeysOfStudent: [],
     isMotion: window.localStorage.getItem(`${prefix}userIsMotion`) === 'true',
   },
 
@@ -26,6 +27,13 @@ export default modelExtend(pageModel, {
           dispatch({
             type: 'query',
             payload: location.query,
+          })
+        } else if (location.pathname === '/attendance/record') {
+          dispatch({
+            type: 'query',
+            payload: {
+              pageSize: 10000,
+            },
           })
         }
       })
@@ -92,6 +100,15 @@ export default modelExtend(pageModel, {
       }
     },
 
+    * apply ({ payload }, { select, call, put }) {
+      const data = yield call(apply, payload)
+      if (data.code === '000000') {
+        yield put({ type: 'query' })
+      } else {
+        throw data
+      }
+    },
+
   },
 
   reducers: {
@@ -101,7 +118,8 @@ export default modelExtend(pageModel, {
     },
 
     hideModal (state) {
-      return { ...state, modalVisible: false }
+      // 关闭 modal 后同时清除选择的学生
+      return { ...state, modalVisible: false, selectedRowKeysOfStudent: [] }
     },
 
     switchIsMotion (state) {

@@ -33,7 +33,6 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) =
       title: '教师姓名',
       dataIndex: 'name',
       key: 'name',
-      render: (text, record) => <Link to={`user/${record.id}`}>{text}</Link>,
     }, {
       title: '教师性别',
       dataIndex: 'gender',
@@ -75,7 +74,7 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) =
         return (
           <div className={styles.menuwrap}>
             <a onClick={e => handleMenuClick(record, { key: '1' })}>编辑</a>
-            <a>删除</a>
+
           </div>
         )
       },

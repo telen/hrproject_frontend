@@ -9,7 +9,7 @@ import styles from './List.less'
 
 const confirm = Modal.confirm
 
-const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) => {
+const List = ({ onDeleteItem, onEditItem, isMotion, location, room, ...tableProps }) => {
   const handleMenuClick = (record, e) => {
     if (e.key === '1') {
       onEditItem(record)
@@ -44,6 +44,13 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) =
       title: '所属班级',
       dataIndex: 'classId',
       key: 'classId',
+      render: (text) => {
+        const classItem = room.list.filter((item) => {
+          return item.classId === text
+        })
+
+        return classItem[0] ? classItem[0].classname : text
+      }
     }, {
       title: '上课打卡时间',
       dataIndex: 'startTime',
@@ -116,6 +123,7 @@ List.propTypes = {
   onEditItem: PropTypes.func,
   isMotion: PropTypes.bool,
   location: PropTypes.object,
+  room: PropTypes.object,
 }
 
 export default List

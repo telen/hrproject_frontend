@@ -6,7 +6,7 @@ const { apiPrefix } = config
 let database = posts
 
 const host = '192.168.199.220:8080'
-const enableMock = false
+const enableMock = true
 
 module.exports = {
   [`POST ${apiPrefix}/teacher/new`] (req, res) {

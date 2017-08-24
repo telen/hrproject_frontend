@@ -7,12 +7,13 @@ import List from './List'
 import Filter from './Filter'
 import Modal from './Modal'
 
-const Room = ({ location, dispatch, room, loading }) => {
-  const { list, pagination, currentItem, modalVisible, modalType, isMotion, selectedRowKeys } = room
+const Room = ({ location, dispatch, room, loading, course, student }) => {
+  const { list, pagination, currentItem, modalVisible, modalType, isMotion, selectedRowKeys, selectedRowKeysOfStudent } = room
   const { pageSize } = pagination
 
   const listProps = {
     dataSource: list,
+    course,
     loading: loading.effects['room/query'],
     pagination,
     location,
@@ -34,12 +35,20 @@ const Room = ({ location, dispatch, room, loading }) => {
         payload: id,
       })
     },
-    onEditItem (item) {
+    onEditItem (item, editable) {
       dispatch({
         type: 'room/showModal',
         payload: {
-          modalType: 'update',
+          modalType: editable ? 'update' : 'view',
           currentItem: item,
+        },
+      })
+    },
+    onApplyItem (classId) {
+      dispatch({
+        type: 'room/apply',
+        payload: {
+          classId: classId,
         },
       })
     },
@@ -58,6 +67,7 @@ const Room = ({ location, dispatch, room, loading }) => {
 
   const filterProps = {
     isMotion,
+    course,
     filter: {
       ...location.query,
     },
@@ -104,12 +114,16 @@ const Room = ({ location, dispatch, room, loading }) => {
   }
 
   const modalProps = {
+    modalType,
     item: modalType === 'create' ? {} : currentItem,
     width: 1000,
+    course,
+    student,
     visible: modalVisible,
     maskClosable: false,
+    selectedRowKeysOfStudent,
     confirmLoading: loading.effects['room/update'],
-    title: `${modalType === 'create' ? '添加课程' : '编辑课程'}`,
+    title: `${modalType === 'create' ? '添加班级' : '编辑'}`,
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
@@ -121,6 +135,26 @@ const Room = ({ location, dispatch, room, loading }) => {
       dispatch({
         type: 'room/hideModal',
       })
+    },
+    onCourseChange (courseId) {
+      dispatch({
+        type: 'student/query',
+        payload: {
+          courseId,
+        },
+      })
+    },
+    rowSelection: {
+      selectedRowKeys: modalType === 'create' ? selectedRowKeysOfStudent : currentItem.studentIds,
+      onChange: (keys) => {
+        console.log(keys)
+        dispatch({
+          type: 'room/updateState',
+          payload: {
+            selectedRowKeysOfStudent: keys,
+          },
+        })
+      },
     },
   }
 
@@ -134,10 +168,11 @@ const Room = ({ location, dispatch, room, loading }) => {
   }
 
   const ModalGen = () => <Modal {...modalProps} />
+  const FilterGen = () => <Filter {...filterProps} />
 
   return (
     <div className="content-inner">
-      <Filter {...filterProps} />
+      <FilterGen />
       {
         -1 > 0 &&
         <Row style={{ marginBottom: 24, textAlign: 'right', fontSize: 13 }}>
@@ -160,6 +195,8 @@ Room.propTypes = {
   location: PropTypes.object,
   dispatch: PropTypes.func,
   loading: PropTypes.object,
+  course: PropTypes.object,
+  student: PropTypes.object,
 }
 
-export default connect(({ room, loading }) => ({ room, loading }))(Room)
+export default connect(({ room, loading, course, student }) => ({ room, loading, course, student }))(Room)

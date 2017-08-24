@@ -6,7 +6,7 @@ const { apiPrefix } = config
 let database = posts
 
 const host = '192.168.199.220:8080'
-const enableMock = false
+const enableMock = true
 
 module.exports = {
   [`POST ${apiPrefix}/attendance/new`] (req, res) {
@@ -40,6 +40,7 @@ module.exports = {
 
     if (enableMock) {
       res.status(200).json({
+        code: '000000',
         data: mockList.data.slice((page - 1) * pageSize, page * pageSize),
         total: mockList.data.length,
       })

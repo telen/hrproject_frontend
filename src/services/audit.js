@@ -1,11 +1,11 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { room } = api
+const { audit } = api
 
 export async function query (params) {
   return request({
-    url: `${room}/query`,
+    url: `${audit}/manager/classAudit`,
     method: 'get',
     data: params,
   })
@@ -13,7 +13,7 @@ export async function query (params) {
 
 export async function create (params) {
   return request({
-    url: `${room}/new`,
+    url: `${audit}/new`,
     method: 'post',
     data: params,
   })
@@ -21,7 +21,7 @@ export async function create (params) {
 
 export async function remove (params) {
   return request({
-    url: `${room}/delete`,
+    url: `${audit}/delete`,
     method: 'post',
     data: params,
   })
@@ -29,7 +29,7 @@ export async function remove (params) {
 
 export async function update (params) {
   return request({
-    url: `${room}/update`,
+    url: `${audit}/update`,
     method: 'post',
     data: params,
   })
@@ -37,7 +37,7 @@ export async function update (params) {
 
 export async function apply (params) {
   return request({
-    url: `${room}/apply`,
+    url: `${audit}/apply`,
     method: 'post',
     data: params,
   })
@@ -45,7 +45,7 @@ export async function apply (params) {
 
 export async function pass (params) {
   return request({
-    url: `${room}/pass`,
+    url: `${audit}/pass`,
     method: 'post',
     data: params,
   })
@@ -53,7 +53,7 @@ export async function pass (params) {
 
 export async function reject (params) {
   return request({
-    url: `${room}/reject`,
+    url: `${audit}/reject`,
     method: 'post',
     data: params,
   })

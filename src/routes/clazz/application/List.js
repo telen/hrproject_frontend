@@ -26,16 +26,12 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) =
   const columns = [
     {
       title: '班级编号',
-      dataIndex: 'id',
-      key: 'id',
+      dataIndex: 'classId',
+      key: 'classId',
     }, {
       title: '班级名称',
-      dataIndex: 'name',
-      key: 'name',
-    }, {
-      title: '所属机构',
-      dataIndex: 'agentName',
-      key: 'agentName',
+      dataIndex: 'classname',
+      key: 'classname',
     }, {
       title: '申请状态',
       dataIndex: 'status',
@@ -69,7 +65,7 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) =
         {...tableProps}
         className={classnames({ [styles.table]: true, [styles.motion]: false })}
         bordered
-        scroll={{ x: 1250 }}
+
         columns={columns}
         simple
         rowKey={record => record.id}

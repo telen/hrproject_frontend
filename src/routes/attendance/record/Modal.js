@@ -23,6 +23,7 @@ const dateFormat = 'YYYY-MM-DD'
 
 const modal = ({
   item = {},
+  room,
   onOk,
   form: {
     getFieldDecorator,
@@ -149,11 +150,9 @@ const modal = ({
                     },
                   ],
                 })(<Select>
-                  <Option value="1">市场营销</Option>
-                  <Option value="2">美容美发</Option>
-                  <Option value="3">厨师</Option>
-                  <Option value="4">挖掘机</Option>
-                  <Option value="5">钣金喷漆</Option>
+                  {room.list.map((itemc) => {
+                    return <Option key={itemc.classId} value={itemc.classId}>{itemc.classname}</Option>
+                  })}
                 </Select>)}
               </FormItem>
             </Col>
@@ -197,6 +196,7 @@ modal.propTypes = {
   type: PropTypes.string,
   item: PropTypes.object,
   onOk: PropTypes.func,
+  room: PropTypes.object,
 }
 
 export default Form.create()(modal)

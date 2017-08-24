@@ -43,17 +43,17 @@ const Application = ({ location, dispatch, application, loading }) => {
         },
       })
     },
-    rowSelection: {
-      selectedRowKeys,
-      onChange: (keys) => {
-        dispatch({
-          type: 'application/updateState',
-          payload: {
-            selectedRowKeys: keys,
-          },
-        })
-      },
-    },
+    // rowSelection: {
+    //   selectedRowKeys,
+    //   onChange: (keys) => {
+    //     dispatch({
+    //       type: 'application/updateState',
+    //       payload: {
+    //         selectedRowKeys: keys,
+    //       },
+    //     })
+    //   },
+    // },
   }
 
   const filterProps = {

@@ -7,12 +7,13 @@ import List from './List'
 import Filter from './Filter'
 import Modal from './Modal'
 
-const InspectionBefore = ({ location, dispatch, inspectionBefore, loading }) => {
-  const { list, pagination, currentItem, modalVisible, modalType, isMotion, selectedRowKeys } = inspectionBefore
+const InspectionBefore = ({ location, dispatch, inspectionBefore, loading, course }) => {
+  const { list, pagination, currentItem, currentStudents, modalVisible, modalType, isMotion, selectedRowKeys } = inspectionBefore
   const { pageSize } = pagination
 
   const listProps = {
     dataSource: list,
+    course,
     loading: loading.effects['inspectionBefore/query'],
     pagination,
     location,
@@ -30,16 +31,17 @@ const InspectionBefore = ({ location, dispatch, inspectionBefore, loading }) => 
     },
     onDeleteItem (id) {
       dispatch({
-        type: 'user/delete',
+        type: 'inspectionBefore/delete',
         payload: id,
       })
     },
     onEditItem (item) {
       dispatch({
-        type: 'user/showModal',
+        type: 'inspectionBefore/queryStudent',
         payload: {
-          modalType: 'update',
-          currentItem: item,
+          agencyId: item.agencyId,
+          classId: item.classId,
+          pageSize: 10000,
         },
       })
     },
@@ -94,6 +96,7 @@ const InspectionBefore = ({ location, dispatch, inspectionBefore, loading }) => 
 
   const modalProps = {
     item: modalType === 'create' ? {} : currentItem,
+    currentStudents,
     width: 1000,
     visible: modalVisible,
     maskClosable: false,
@@ -149,6 +152,7 @@ InspectionBefore.propTypes = {
   location: PropTypes.object,
   dispatch: PropTypes.func,
   loading: PropTypes.object,
+  course: PropTypes.object,
 }
 
-export default connect(({ inspectionBefore, loading }) => ({ inspectionBefore, loading }))(InspectionBefore)
+export default connect(({ inspectionBefore, loading, course }) => ({ inspectionBefore, loading, course }))(InspectionBefore)

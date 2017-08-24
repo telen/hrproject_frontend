@@ -107,8 +107,8 @@ const modal = ({
             </Col>
             <Col span={8}>
               <FormItem label="邮箱" hasFeedback {...formItemLayout}>
-                {getFieldDecorator('agencyMail', {
-                  initialValue: item.agencyMail,
+                {getFieldDecorator('agencyEmail', {
+                  initialValue: item.agencyEmail,
                   rules: [
                     {
                       required: true,

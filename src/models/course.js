@@ -28,7 +28,9 @@ export default modelExtend(pageModel, {
             type: 'query',
             payload: location.query,
           })
-        } else if (location.pathname === '/student') {
+        } else if (location.pathname === '/student'
+          || location.pathname === '/class/room'
+        ) {
           dispatch({
             type: 'query',
             payload: {

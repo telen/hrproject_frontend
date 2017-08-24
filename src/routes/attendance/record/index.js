@@ -7,12 +7,13 @@ import List from './List'
 import Filter from './Filter'
 import Modal from './Modal'
 
-const Record = ({ location, dispatch, record, loading }) => {
+const Record = ({ location, dispatch, record, loading, room }) => {
   const { list, pagination, currentItem, modalVisible, modalType, isMotion, selectedRowKeys } = record
   const { pageSize } = pagination
 
   const listProps = {
     dataSource: list,
+    room,
     loading: loading.effects['record/query'],
     pagination,
     location,
@@ -58,6 +59,7 @@ const Record = ({ location, dispatch, record, loading }) => {
 
   const filterProps = {
     isMotion,
+    room,
     filter: {
       ...location.query,
     },
@@ -106,6 +108,7 @@ const Record = ({ location, dispatch, record, loading }) => {
   const modalProps = {
     item: modalType === 'create' ? {} : currentItem,
     width: 1000,
+    room,
     visible: modalVisible,
     maskClosable: false,
     confirmLoading: loading.effects['record/update'],
@@ -134,10 +137,11 @@ const Record = ({ location, dispatch, record, loading }) => {
   }
 
   const ModalGen = () => <Modal {...modalProps} />
+  const FilterGen = () => <Filter {...filterProps} />
 
   return (
     <div className="content-inner">
-      <Filter {...filterProps} />
+      <FilterGen />
       {
         -1 > 0 &&
         <Row style={{ marginBottom: 24, textAlign: 'right', fontSize: 13 }}>
@@ -160,6 +164,7 @@ Record.propTypes = {
   location: PropTypes.object,
   dispatch: PropTypes.func,
   loading: PropTypes.object,
+  room: PropTypes.object,
 }
 
-export default connect(({ record, loading }) => ({ record, loading }))(Record)
+export default connect(({ record, loading, room }) => ({ record, loading, room }))(Record)
