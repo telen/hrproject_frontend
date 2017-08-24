@@ -28,7 +28,11 @@ export default modelExtend(pageModel, {
             type: 'query',
             payload: location.query,
           })
-        } else if (location.pathname === '/classMgt') {
+        } else if (location.pathname === '/classMgt'
+          || location.pathname === '/inspection/inspectionInprogress'
+          || location.pathname === '/inspection/inspectionBefore'
+          || location.pathname === '/inspection/inspectionAfter'
+        ) {
           dispatch({
             type: 'query',
             payload: {

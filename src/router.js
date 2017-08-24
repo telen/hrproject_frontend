@@ -163,6 +163,7 @@ const Routers = function ({ history, app }) {
           getComponent (nextState, cb) {
             require.ensure([], (require) => {
               registerModel(app, require('models/inspection/before'))
+              registerModel(app, require('models/agentMgt'))
               registerModel(app, require('models/course'))
               cb(null, require('routes/inspection/before/'))
             }, 'inspection-before')
@@ -172,6 +173,8 @@ const Routers = function ({ history, app }) {
           getComponent (nextState, cb) {
             require.ensure([], (require) => {
               registerModel(app, require('models/inspection/inprogress'))
+              registerModel(app, require('models/agentMgt'))
+              registerModel(app, require('models/course'))
               cb(null, require('routes/inspection/inprogress/'))
             }, 'inspection-before')
           },
@@ -180,6 +183,8 @@ const Routers = function ({ history, app }) {
           getComponent (nextState, cb) {
             require.ensure([], (require) => {
               registerModel(app, require('models/inspection/after'))
+              registerModel(app, require('models/agentMgt'))
+              registerModel(app, require('models/course'))
               cb(null, require('routes/inspection/after/'))
             }, 'inspection-before')
           },

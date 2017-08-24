@@ -7,8 +7,8 @@ import List from './List'
 import Filter from './Filter'
 import Modal from './Modal'
 
-const InspectionBefore = ({ location, dispatch, inspectionBefore, loading, course }) => {
-  const { list, pagination, currentItem, currentStudents, modalVisible, modalType, isMotion, selectedRowKeys } = inspectionBefore
+const InspectionBefore = ({ location, dispatch, inspectionBefore, loading, course, agentMgt }) => {
+  const { list, pagination, currentItem, currentStudents, currentStudent, modalVisible, modalType, isMotion, selectedRowKeys } = inspectionBefore
   const { pageSize } = pagination
 
   const listProps = {
@@ -39,9 +39,7 @@ const InspectionBefore = ({ location, dispatch, inspectionBefore, loading, cours
       dispatch({
         type: 'inspectionBefore/queryStudent',
         payload: {
-          agencyId: item.agencyId,
-          classId: item.classId,
-          pageSize: 10000,
+          currentItem: item,
         },
       })
     },
@@ -49,6 +47,7 @@ const InspectionBefore = ({ location, dispatch, inspectionBefore, loading, cours
 
   const filterProps = {
     isMotion,
+    agentMgt,
     filter: {
       ...location.query,
     },
@@ -97,6 +96,7 @@ const InspectionBefore = ({ location, dispatch, inspectionBefore, loading, cours
   const modalProps = {
     item: modalType === 'create' ? {} : currentItem,
     currentStudents,
+    currentStudent,
     width: 1000,
     visible: modalVisible,
     maskClosable: false,
@@ -114,6 +114,14 @@ const InspectionBefore = ({ location, dispatch, inspectionBefore, loading, cours
         type: 'inspectionBefore/hideModal',
       })
     },
+    onStudentClick (index) {
+      dispatch({
+        type: 'inspectionBefore/showStudent',
+        payload: {
+          currentStudent: currentStudents[index],
+        },
+      })
+    },
   }
 
   const handleDeleteItems = () => {
@@ -126,10 +134,11 @@ const InspectionBefore = ({ location, dispatch, inspectionBefore, loading, cours
   }
 
   const ModalGen = () => <Modal {...modalProps} />
+  const FilterGen = () => <Filter {...filterProps} />
 
   return (
     <div className="content-inner">
-      <Filter {...filterProps} />
+      <FilterGen />
       {
         -1 > 0 &&
         <Row style={{ marginBottom: 24, textAlign: 'right', fontSize: 13 }}>
@@ -153,6 +162,7 @@ InspectionBefore.propTypes = {
   dispatch: PropTypes.func,
   loading: PropTypes.object,
   course: PropTypes.object,
+  agentMgt: PropTypes.object,
 }
 
-export default connect(({ inspectionBefore, loading, course }) => ({ inspectionBefore, loading, course }))(InspectionBefore)
+export default connect(({ inspectionBefore, loading, course, agentMgt }) => ({ inspectionBefore, loading, course, agentMgt }))(InspectionBefore)

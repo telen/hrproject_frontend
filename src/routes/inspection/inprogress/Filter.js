@@ -2,9 +2,10 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import { FilterItem } from 'components'
-import { Form, Button, Row, Col, Input } from 'antd'
+import { Form, Button, Row, Col, Input, Select  } from 'antd'
 
 const Search = Input.Search
+const Option = Select.Option
 
 const ColProps = {
   xs: 24,
@@ -20,6 +21,7 @@ const TwoColProps = {
 }
 
 const Filter = ({
+  agentMgt,
   onAdd,
   onFilterChange,
   onDeleteItems,
@@ -59,9 +61,9 @@ const Filter = ({
     handleSubmit()
   }
 
-  const handleChange = (key, values) => {
+  const handleChange = (value) => {
     let fields = getFieldsValue()
-    fields[key] = values
+    fields.agencyId = value
     onFilterChange(fields)
   }
   const { agentName } = filter
@@ -83,7 +85,17 @@ const Filter = ({
         }
       </Col>
       <Col span={4}>
-        {getFieldDecorator('agentName', { initialValue: agentName })(<Search placeholder="搜索机构名称" onSearch={handleSubmit} />)}
+        {getFieldDecorator('agentName', { initialValue: agentName })(<Select
+          onChange={handleChange}
+          allowClear={true}
+          placeholder="请选择机构"
+          className="ant-input-affix-wrapper">
+          {
+            agentMgt.list.map((item) => {
+              return <Option key={item.agencyId} value={item.agencyId}>{item.agencyName}</Option>
+            })
+          }
+        </Select>)}
       </Col>
     </Row>
   )

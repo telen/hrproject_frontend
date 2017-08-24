@@ -7,12 +7,13 @@ import List from './List'
 import Filter from './Filter'
 import Modal from './Modal'
 
-const InspectionAfter = ({ location, dispatch, inspectionAfter, loading }) => {
-  const { list, pagination, currentItem, modalVisible, modalType, isMotion, selectedRowKeys } = inspectionAfter
+const InspectionAfter = ({ location, dispatch, inspectionAfter, loading, course, agentMgt }) => {
+  const { list, pagination, currentItem, currentStudents, currentStudent, modalVisible, modalType, isMotion, selectedRowKeys } = inspectionAfter
   const { pageSize } = pagination
 
   const listProps = {
     dataSource: list,
+    course,
     loading: loading.effects['inspectionAfter/query'],
     pagination,
     location,
@@ -30,15 +31,14 @@ const InspectionAfter = ({ location, dispatch, inspectionAfter, loading }) => {
     },
     onDeleteItem (id) {
       dispatch({
-        type: 'user/delete',
+        type: 'inspectionAfter/delete',
         payload: id,
       })
     },
     onEditItem (item) {
       dispatch({
-        type: 'user/showModal',
+        type: 'inspectionAfter/queryStudent',
         payload: {
-          modalType: 'update',
           currentItem: item,
         },
       })
@@ -47,6 +47,7 @@ const InspectionAfter = ({ location, dispatch, inspectionAfter, loading }) => {
 
   const filterProps = {
     isMotion,
+    agentMgt,
     filter: {
       ...location.query,
     },
@@ -94,6 +95,8 @@ const InspectionAfter = ({ location, dispatch, inspectionAfter, loading }) => {
 
   const modalProps = {
     item: modalType === 'create' ? {} : currentItem,
+    currentStudents,
+    currentStudent,
     width: 1000,
     visible: modalVisible,
     maskClosable: false,
@@ -111,6 +114,14 @@ const InspectionAfter = ({ location, dispatch, inspectionAfter, loading }) => {
         type: 'inspectionAfter/hideModal',
       })
     },
+    onStudentClick (index) {
+      dispatch({
+        type: 'inspectionAfter/showStudent',
+        payload: {
+          currentStudent: currentStudents[index],
+        },
+      })
+    },
   }
 
   const handleDeleteItems = () => {
@@ -123,10 +134,11 @@ const InspectionAfter = ({ location, dispatch, inspectionAfter, loading }) => {
   }
 
   const ModalGen = () => <Modal {...modalProps} />
+  const FilterGen = () => <Filter {...filterProps} />
 
   return (
     <div className="content-inner">
-      <Filter {...filterProps} />
+      <FilterGen />
       {
         -1 > 0 &&
         <Row style={{ marginBottom: 24, textAlign: 'right', fontSize: 13 }}>
@@ -149,6 +161,8 @@ InspectionAfter.propTypes = {
   location: PropTypes.object,
   dispatch: PropTypes.func,
   loading: PropTypes.object,
+  course: PropTypes.object,
+  agentMgt: PropTypes.object,
 }
 
-export default connect(({ inspectionAfter, loading }) => ({ inspectionAfter, loading }))(InspectionAfter)
+export default connect(({ inspectionAfter, loading, course, agentMgt }) => ({ inspectionAfter, loading, course, agentMgt }))(InspectionAfter)

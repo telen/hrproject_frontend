@@ -14,6 +14,7 @@ export default modelExtend(pageModel, {
   state: {
     currentItem: {},
     currentStudents: [],
+    currentStudent: {},
     modalVisible: false,
     modalType: 'create',
     selectedRowKeys: [],
@@ -94,17 +95,23 @@ export default modelExtend(pageModel, {
     },
 
     * queryStudent ({ payload }, { select, call, put }) {
-      const data = yield call(studentService.query, payload)
+      const data = yield call(studentService.query, {
+        classId: payload.classId,
+        agencyId: payload.agencyId,
+        pageSize: 10000,
+      })
       if (data.code === '000000') {
         yield put({
           type: 'showModal',
-          payload: {
-            modalType: 'update',
-            currentStudents: data.data,
+          payload: { ...payload,
+            ...{
+              modalType: 'update',
+              currentStudents: data.data,
+            },
           },
         })
       }
-    }
+    },
 
   },
 
@@ -115,12 +122,16 @@ export default modelExtend(pageModel, {
     },
 
     hideModal (state) {
-      return { ...state, modalVisible: false }
+      return { ...state, modalVisible: false, currentStudent: {}, currentStudents: [] }
     },
 
     switchIsMotion (state) {
       window.localStorage.setItem(`${prefix}userIsMotion`, !state.isMotion)
       return { ...state, isMotion: !state.isMotion }
+    },
+
+    showStudent (state, { payload }) {
+      return { ...state, ...payload }
     },
 
   },
