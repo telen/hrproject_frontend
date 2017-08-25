@@ -77,12 +77,10 @@ const Filter = ({
   return (
     <Row gutter={24} type="flex" justify="space-between">
       <Col {...ColProps} >
-        <Button type="primary" style={{ marginRight: 16 }} icon="plus" onClick={onAdd}>添加机构</Button>
-        <Button icon="delete" style={{ marginRight: 16 }} onClick={onDeleteItems} >批量删除</Button>
         <Button icon="reload" style={{ marginRight: 16 }} onClick={handleSubmit}>刷新</Button>
       </Col>
       <Col span={4}>
-        {getFieldDecorator('agentName', { initialValue: agentName })(<Search placeholder="搜索机构名称" onSearch={handleSubmit} />)}
+        {getFieldDecorator('keyword', { initialValue: filter.keyword })(<Search placeholder="搜索机构名称" onSearch={handleSubmit} />)}
       </Col>
     </Row>
   )

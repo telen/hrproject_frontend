@@ -58,3 +58,12 @@ export async function reject (params) {
     data: params,
   })
 }
+
+// 机构审核 查询台账
+export async function ledgerAudit (params) {
+  return request({
+    url: `${audit}/manager/ledgerAudit`,
+    method: 'get',
+    data: params,
+  })
+}

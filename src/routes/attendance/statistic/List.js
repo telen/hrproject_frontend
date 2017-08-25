@@ -26,40 +26,40 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) =
   const columns = [
     {
       title: '班级编号',
-      dataIndex: 'id',
-      key: 'id',
+      dataIndex: 'classId',
+      key: 'classId',
     }, {
       title: '班级名称',
-      dataIndex: 'name',
-      key: 'name',
+      dataIndex: 'classname',
+      key: 'classname',
     }, {
       title: '班级人数',
-      dataIndex: 'studentNumber',
-      key: 'studentNumber',
+      dataIndex: 'totalCount',
+      key: 'totalCount',
     }, {
       title: '教师姓名',
       dataIndex: 'teacherName',
       key: 'teacherName',
     }, {
       title: '考勤正常人数',
-      dataIndex: 'regular',
-      key: 'regular',
+      dataIndex: 'normalCount',
+      key: 'normalCount',
     }, {
       title: '迟到人数',
-      dataIndex: 'late',
-      key: 'late',
+      dataIndex: 'beLateCount',
+      key: 'beLateCount',
     }, {
       title: '早退人数',
-      dataIndex: 'leave',
-      key: 'leave',
+      dataIndex: 'leaveEarlyCount',
+      key: 'leaveEarlyCount',
     }, {
       title: '旷课人数',
-      dataIndex: 'cutschool',
-      key: 'cutschool',
+      dataIndex: 'absentCount',
+      key: 'absentCount',
     }, {
       title: '补录人数',
-      dataIndex: 'reCheckin',
-      key: 'reCheckin',
+      dataIndex: 'addedCount',
+      key: 'addedCount',
     }, {
       title: '操作',
       key: 'operation',
@@ -68,7 +68,7 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) =
         const drop = <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: 'Update' }, { key: '2', name: 'Delete' }]} />
         return (
           <div className={styles.menuwrap}>
-            <a>考勤详情</a>
+            <a onClick={() => handleMenuClick(record, { key: '1' })}>考勤详情</a>
           </div>
         )
       },
@@ -91,7 +91,7 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) =
         scroll={{ x: 1250 }}
         columns={columns}
         simple
-        rowKey={record => record.id}
+        rowKey={record => record.classId}
       />
     </div>
   )

@@ -68,8 +68,8 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, course, ...tablePr
       render: (text) => moment(text).format(dateFormat),
     }, {
       title: '抽查历史',
-      dataIndex: 'inspections',
-      key: 'inspections',
+      dataIndex: 'inspectionCount',
+      key: 'inspectionCount',
     }, {
       title: '操作',
       key: 'operation',

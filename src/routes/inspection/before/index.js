@@ -103,6 +103,7 @@ const InspectionBefore = ({ location, dispatch, inspectionBefore, loading, cours
     confirmLoading: loading.effects['inspectionBefore/update'],
     title: `${modalType === 'create' ? '添加课程' : '编辑课程'}`,
     wrapClassName: 'vertical-center-modal',
+    footer: null,
     onOk (data) {
       dispatch({
         type: `inspectionBefore/${modalType}`,
@@ -119,6 +120,24 @@ const InspectionBefore = ({ location, dispatch, inspectionBefore, loading, cours
         type: 'inspectionBefore/showStudent',
         payload: {
           currentStudent: currentStudents[index],
+        },
+      })
+    },
+    onCheckOk (classId) {
+      dispatch({
+        type: 'inspectionBefore/inspect',
+        payload: {
+          inspectionStatus: 1,
+          classId,
+        },
+      })
+    },
+    onCheckNotOk (classId) {
+      dispatch({
+        type: 'inspectionBefore/inspect',
+        payload: {
+          inspectionStatus: 0,
+          classId,
         },
       })
     },

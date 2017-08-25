@@ -9,15 +9,22 @@ import styles from './List.less'
 
 const confirm = Modal.confirm
 
-const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) => {
+const List = ({ onDeleteItem, onEditItem, onEditItemPass, isMotion, location, ...tableProps }) => {
   const handleMenuClick = (record, e) => {
-    if (e.key === '1') {
+    if (e.key === '0') {
       onEditItem(record)
+    } else if (e.key === '1') {
+      confirm({
+        title: '确定通过审核吗?',
+        onOk () {
+          onEditItemPass(record.flowId)
+        },
+      })
     } else if (e.key === '2') {
       confirm({
-        title: 'Are you sure delete this record?',
+        title: '确定驳回吗?',
         onOk () {
-          onDeleteItem(record.id)
+          onDeleteItem(record.flowId)
         },
       })
     }
@@ -25,60 +32,97 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) =
 
   const columns = [
     {
-      title: '机构编号',
-      dataIndex: 'agentId',
-      key: 'agentId',
+      title: '台账编号',
+      dataIndex: 'ledgerId',
+      key: 'ledgerId',
     }, {
-      title: '是否已申请国培训补贴',
+      title: '机构编号',
+      dataIndex: 'agencyId',
+      key: 'agencyId',
+    }, {
+      title: '机构名称',
+      dataIndex: 'agencyName',
+      key: 'agencyName',
+    }, {
+      title: '课程编号',
+      dataIndex: 'courseId',
+      key: 'courseId',
+    }, {
+      title: '课程名称',
+      dataIndex: 'courseName',
+      key: 'courseName',
+    }, {
+      title: '编辑编号',
+      dataIndex: 'classId',
+      key: 'classId',
+    }, {
+      title: '编辑编号',
+      dataIndex: 'className',
+      key: 'className',
+    }, {
+      title: '毕业人数',
+      dataIndex: 'graduateNumbers',
+      key: 'graduateNumbers',
+    }, {
+      title: '毕业时间',
+      dataIndex: 'graduateTime',
+      key: 'graduateTime',
+    }, {
+      title: '出勤率',
+      dataIndex: 'attendanceRate',
+      key: 'attendanceRate',
+    }, {
+      title: '是否已申请培训补贴',
       dataIndex: 'name',
       key: 'name',
     }, {
-      title: '机构负责人',
-      dataIndex: 'charger',
-      key: 'charger',
+      title: '申请人姓名',
+      dataIndex: 'applicantName',
+      key: 'applicantName',
     }, {
-      title: '公民身份证号码',
-      dataIndex: 'id',
-      key: 'id',
+      title: '申请手机号',
+      dataIndex: 'applicantMobile',
+      key: 'applicantMobile',
     }, {
-      title: '人员类别',
-      dataIndex: 'people',
-      key: 'people',
-    }, {
-      title: '申请时间',
-      dataIndex: 'createTime',
-      key: 'createTime',
-    }, {
-      title: '批准时间',
-      dataIndex: 'passTime',
-      key: 'passTime',
-    }, {
-      title: '申请人邮箱',
-      dataIndex: 'agencyEmail',
-      key: 'agencyEmail',
-    }, {
-      title: '上级主管部门',
-      dataIndex: 'chargerDev',
-      key: 'chargerDev',
-    }, {
-      title: '机构教师信息',
-      dataIndex: 'teachers',
-      key: 'teachers',
-    }, {
-      title: '机构开设专业',
-      dataIndex: 'courses',
-      key: 'courses',
+      title: '审批状态',
+      dataIndex: 'auditStatus',
+      key: 'auditStatus',
+      render: (text) => {
+        let t = ''
+        switch (text) {
+          case 0:
+            t = '初始化(默认值)'
+            break
+          case 1:
+            t = '等待审核'
+            break
+          case 2:
+            t = '审核通过'
+            break
+          case 3:
+            t = '审核驳回'
+            break
+          default:
+            t = '未知'
+        }
+        return t
+      },
     }, {
       title: '操作',
       key: 'operation',
       width: 100,
       render: (text, record) => {
         const drop = <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: 'Update' }, { key: '2', name: 'Delete' }]} />
-        return (
-          <div className={styles.menuwrap}>
-            <a>审核</a>
-          </div>
-        )
+        const men = record.auditStatus === 1 ?
+          (<div className={styles.menuwrap}>
+            <a onClick={() => { handleMenuClick(record, { key: '0' }) }}>详情</a>
+            <a onClick={() => { handleMenuClick(record, { key: '1' }) }}>通过</a>
+            <a onClick={() => { handleMenuClick(record, { key: '2' }) }}>驳回</a>
+          </div>)
+          : (<div className={styles.menuwrap}>
+            <a onClick={() => { handleMenuClick(record, { key: '0' }) }}>详情</a>
+          </div>)
+        return men
       },
     },
   ]
@@ -96,10 +140,10 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) =
         {...tableProps}
         className={classnames({ [styles.table]: true, [styles.motion]: false })}
         bordered
-        scroll={{ x: 1250 }}
+        scroll={{ x: 1550 }}
         columns={columns}
         simple
-        rowKey={record => record.id}
+        rowKey={record => record.ledgerId}
       />
     </div>
   )
@@ -110,6 +154,7 @@ List.propTypes = {
   onEditItem: PropTypes.func,
   isMotion: PropTypes.bool,
   location: PropTypes.object,
+  onEditItemPass: PropTypes.func,
 }
 
 export default List

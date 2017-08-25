@@ -1,11 +1,11 @@
 import { request, config } from 'utils'
 
 const { api } = config
-const { attendanceRecord } = api
+const { ledger } = api
 
 export async function query (params) {
   return request({
-    url: `${attendanceRecord}/query`,
+    url: `${ledger}/query`,
     method: 'get',
     data: params,
   })
@@ -13,7 +13,7 @@ export async function query (params) {
 
 export async function create (params) {
   return request({
-    url: `${attendanceRecord}/new`,
+    url: `${ledger}/new`,
     method: 'post',
     data: params,
   })
@@ -21,7 +21,7 @@ export async function create (params) {
 
 export async function remove (params) {
   return request({
-    url: `${attendanceRecord}/delete`,
+    url: `${ledger}/delete`,
     method: 'post',
     data: params,
   })
@@ -29,15 +29,23 @@ export async function remove (params) {
 
 export async function update (params) {
   return request({
-    url: `${attendanceRecord}/update`,
+    url: `${ledger}/update`,
     method: 'post',
     data: params,
   })
 }
 
-export async function queryStatistic (params) {
+export async function apply (params) {
   return request({
-    url: `${attendanceRecord}/statistic`,
+    url: `${ledger}/apply`,
+    method: 'post',
+    data: params,
+  })
+}
+
+export async function queryGraduate (params) {
+  return request({
+    url: `${ledger}/snapshot`,
     method: 'get',
     data: params,
   })

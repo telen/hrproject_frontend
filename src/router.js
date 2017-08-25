@@ -134,6 +134,14 @@ const Routers = function ({ history, app }) {
             }, 'graduate-statistic')
           },
         }, {
+          path: 'graduate/ledger',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/graduate/ledger'))
+              cb(null, require('routes/graduate/ledger/'))
+            }, 'graduate-ledger')
+          },
+        }, {
           path: 'agentMgt',
           getComponent (nextState, cb) {
             require.ensure([], (require) => {

@@ -58,3 +58,27 @@ export async function reject (params) {
     data: params,
   })
 }
+
+export async function updateGraduate (params) {
+  return request({
+    url: `${room}/graduate`,
+    method: 'post',
+    data: params,
+  })
+}
+
+export async function queryGraduate (params) {
+  return request({
+    url: `${room}/queryGraduate`,
+    method: 'get',
+    data: params,
+  })
+}
+
+export async function inspect (params) {
+  return request({
+    url: `${room}/inspection`,
+    method: 'post',
+    data: params,
+  })
+}

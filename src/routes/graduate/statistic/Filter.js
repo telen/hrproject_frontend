@@ -77,11 +77,10 @@ const Filter = ({
   return (
     <Row gutter={24} type="flex" justify="space-between">
       <Col {...ColProps} >
-        <Button type="primary" style={{ marginRight: 16 }} icon="file-add" onClick={onAdd}>一键生成台账</Button>
         <Button icon="reload" style={{ marginRight: 16 }} onClick={handleSubmit}>刷新</Button>
       </Col>
       <Col span={4}>
-        {getFieldDecorator('agentName', { initialValue: agentName })(<Search placeholder="搜索机构名称" onSearch={handleSubmit} />)}
+        {getFieldDecorator('keyword', { initialValue: filter.keyword })(<Search placeholder="搜索机构名称" onSearch={handleSubmit} />)}
       </Col>
     </Row>
   )

@@ -103,6 +103,7 @@ const InspectionInprogress = ({ location, dispatch, inspectionInprogress, loadin
     confirmLoading: loading.effects['inspectionInprogress/update'],
     title: `${modalType === 'create' ? '添加课程' : '编辑课程'}`,
     wrapClassName: 'vertical-center-modal',
+    footer: null,
     onOk (data) {
       dispatch({
         type: `inspectionInprogress/${modalType}`,
@@ -119,6 +120,24 @@ const InspectionInprogress = ({ location, dispatch, inspectionInprogress, loadin
         type: 'inspectionInprogress/showStudent',
         payload: {
           currentStudent: currentStudents[index],
+        },
+      })
+    },
+    onCheckOk (classId) {
+      dispatch({
+        type: 'inspectionInprogress/inspect',
+        payload: {
+          inspectionStatus: 2,
+          classId,
+        },
+      })
+    },
+    onCheckNotOk (classId) {
+      dispatch({
+        type: 'inspectionInprogress/inspect',
+        payload: {
+          inspectionStatus: 1,
+          classId,
         },
       })
     },

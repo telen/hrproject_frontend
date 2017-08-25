@@ -1,8 +1,12 @@
+const axios = require('axios')
 const qs = require('qs')
 const Mock = require('mockjs')
 const config = require('../utils/config')
 
 const { apiPrefix } = config
+
+const host = '192.168.199.220:8080'
+const enableMock = true
 
 let usersListData = Mock.mock({
   'data|80-100': [
@@ -120,31 +124,48 @@ const NOTFOUND = {
 module.exports = {
 
   [`POST ${apiPrefix}/user/login`] (req, res) {
-    const { username, password } = req.body
-    const user = adminUsers.filter(item => item.username === username)
 
-    if (user.length > 0 && user[0].password === password) {
-      const now = new Date()
-      now.setDate(now.getDate() + 1)
-      res.cookie('token', JSON.stringify({ id: user[0].id, deadline: now.getTime() }), {
-        maxAge: 24 * 60 * 60 * 1000,
-        httpOnly: true,
-      })
-      // res.json({ success: true, message: 'Ok' })
-      res.status(200).json({
-            "code": "000000",
-            "message": "用户登录成功",
-            "data": {
-            "userId": "17081610203221032122",
-            "userName": "Mr.Monkey",
-            "role": "admin",
-            "authorityList": [
-              "17081610203221032567"
-              ]
-            }
-          })
+    if (enableMock) {
+      const { username, password } = req.body
+      const user = adminUsers.filter(item => item.username === username)
+
+      if (user.length > 0 && user[0].password === password) {
+        const now = new Date()
+        now.setDate(now.getDate() + 1)
+        // res.cookie('token', JSON.stringify({ id: user[0].id, deadline: now.getTime() }), {
+        //   maxAge: 24 * 60 * 60 * 1000,
+        //   httpOnly: true,
+        // })
+        res.cookie('token', user[0].id, {
+          maxAge: 24 * 60 * 60 * 1000,
+          httpOnly: true,
+        })
+        // res.json({ success: true, message: 'Ok' })
+        res.status(200).json({
+              "code": "000000",
+              "message": "用户登录成功",
+              "data": {
+              "userId": "17081610203221032122",
+              "userName": "Mr.Monkey",
+              "role": "admin",
+              "authorityList": [
+                "17081610203221032567"
+                ]
+              }
+            })
+      } else {
+        res.status(400).end()
+      }
     } else {
-      res.status(400).end()
+      axios.defaults.headers.Cookie = req.headers.cookie
+      axios.post(`http://${host}${apiPrefix}/user/login`, req.body)
+        .then(function (response) {
+          res.json(response.data)
+        })
+        .catch(function (error) {
+          console.error(error)
+          res.json({ ret: false })
+        })
     }
   },
 
@@ -154,31 +175,51 @@ module.exports = {
   },
 
   [`GET ${apiPrefix}/user/query`] (req, res) {
-    const cookie = req.headers.cookie || ''
-    const cookies = qs.parse(cookie.replace(/\s/g, ''), { delimiter: ';' })
-    const response = {}
-    const user = {}
-    if (!cookies.token) {
-      res.status(200).send({ message: 'Not Login' })
-      return
-    }
-    const token = JSON.parse(cookies.token)
-    if (token) {
-      response.success = token.deadline > new Date().getTime()
-    }
-    if (response.success) {
-      const userItem = adminUsers.filter(_ => _.id === token.id)
-      if (userItem.length > 0) {
-        // user.authorityList = userItem[0].permissions
-        user.userName = userItem[0].username
-        user.userId = userItem[0].id
-        user.role = userItem[0].permissions.role
-        user.authorityList = userItem[0].permissions.visit
+    if (enableMock) {
+      const cookie = req.headers.cookie || ''
+      const cookies = qs.parse(cookie.replace(/\s/g, ''), { delimiter: ';' })
+      const response = {}
+      const user = {}
+      if (!cookies.token) {
+        res.status(200).send({ message: 'Not Login' })
+        return
       }
+
+      //
+      // const token = JSON.parse(cookies.token)
+      // if (token) {
+      //   response.success = token.deadline > new Date().getTime()
+      // }
+      response.success = true
+      if (response.success) {
+        // const userItem = adminUsers.filter(_ => _.id === token.id)
+        console.log(cookies.token)
+        const userItem = adminUsers.filter(_ => _.id == cookies.token)
+        console.log(userItem)
+        if (userItem.length > 0) {
+          // user.authorityList = userItem[0].permissions
+          user.userName = userItem[0].username
+          user.userId = userItem[0].id
+          user.role = userItem[0].permissions.role
+          user.authorityList = userItem[0].permissions.visit
+        }
+      }
+      response.data = user
+      response.code = '000000'
+      res.json(response)
+    } else {
+      axios.defaults.headers.Cookie = req.headers.cookie
+      axios.get(`http://${host}${apiPrefix}/user/query`, {
+        params: req.query,
+      })
+        .then(function (response) {
+          res.json(response.data)
+        })
+        .catch(function (error) {
+          console.error(error)
+          res.json({ ret: false })
+        })
     }
-    response.data = user
-    response.code = '000000'
-    res.json(response)
   },
 
   [`GET ${apiPrefix}/users`] (req, res) {

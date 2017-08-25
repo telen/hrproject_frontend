@@ -28,6 +28,8 @@ const modal = ({
   currentStudents,
   currentStudent,
   onStudentClick,
+  onCheckOk,
+  onCheckNotOk,
   form: {
     getFieldDecorator,
     validateFields,
@@ -77,8 +79,8 @@ const modal = ({
                 <p>学员人数: </p>
                 <p>申请人: {item.proposer}  申请人电话: {item.proposerMobile} </p>
                 <div className={styles.insetPanel}>
-                  <Button type="primary">完成</Button>
-                  <Button type="default">终止</Button>
+                  <Button type="primary" onClick={() => onCheckOk(item.classId)}>完成</Button>
+                  <Button type="default" onClick={() => onCheckNotOk(item.classId)}>终止</Button>
                 </div>
               </Card>
             </Col>
@@ -105,6 +107,8 @@ modal.propTypes = {
   currentStudents: PropTypes.array,
   onStudentClick: PropTypes.func,
   currentStudent: PropTypes.object,
+  onCheckOk: PropTypes.func,
+  onCheckNotOk: PropTypes.func,
 }
 
 export default Form.create()(modal)

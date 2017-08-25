@@ -4,7 +4,7 @@ import { Form, Input, InputNumber, Radio, Modal, Cascader, Icon,
   Row, Col, Select, DatePicker, Button, Table, Card } from 'antd'
 import styles from './List.less'
 import moment from 'moment'
-
+import city from '../../../utils/city'
 import { classnames, config } from 'utils'
 
 const Option = Select.Option

@@ -41,6 +41,7 @@ const Room = ({ location, dispatch, room, loading, course, student }) => {
         payload: {
           modalType: editable ? 'update' : 'view',
           currentItem: item,
+          selectedRowKeysOfStudent: item.studentIds,
         },
       })
     },
@@ -145,9 +146,8 @@ const Room = ({ location, dispatch, room, loading, course, student }) => {
       })
     },
     rowSelection: {
-      selectedRowKeys: modalType === 'create' ? selectedRowKeysOfStudent : currentItem.studentIds,
+      selectedRowKeys: selectedRowKeysOfStudent,
       onChange: (keys) => {
-        console.log(keys)
         dispatch({
           type: 'room/updateState',
           payload: {

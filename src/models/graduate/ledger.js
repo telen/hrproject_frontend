@@ -1,18 +1,19 @@
 /* global window */
 import modelExtend from 'dva-model-extend'
 import { config } from 'utils'
-import { create, remove, update, ledgerAudit, pass, reject } from 'services/audit'
-import { queryGraduate } from '../services/ledger'
-import * as usersService from 'services/users'
-import { pageModel } from './common'
+import { create, remove, update, query, updateGraduate, queryGraduate } from './../../services/ledger'
+import * as studentService from './../../services/student'
+import { pageModel } from './../common'
 
 const { prefix } = config
 
 export default modelExtend(pageModel, {
-  namespace: 'ledgerCheck',
+  namespace: 'ledger',
 
   state: {
     currentItem: {},
+    currentStudents: [],
+    currentStudent: {},
     modalVisible: false,
     modalType: 'create',
     selectedRowKeys: [],
@@ -23,7 +24,7 @@ export default modelExtend(pageModel, {
   subscriptions: {
     setup ({ dispatch, history }) {
       history.listen((location) => {
-        if (location.pathname === '/ledgerCheck') {
+        if (location.pathname === '/graduate/ledger') {
           dispatch({
             type: 'query',
             payload: location.query,
@@ -36,8 +37,8 @@ export default modelExtend(pageModel, {
   effects: {
 
     * query ({ payload = {} }, { call, put }) {
-      const data = yield call(ledgerAudit, payload)
-      if (data.code === '000000') {
+      const data = yield call(query, payload)
+      if (data) {
         yield put({
           type: 'querySuccess',
           payload: {
@@ -49,8 +50,6 @@ export default modelExtend(pageModel, {
             },
           },
         })
-      } else {
-        throw data
       }
     },
 
@@ -66,7 +65,7 @@ export default modelExtend(pageModel, {
     },
 
     * multiDelete ({ payload }, { call, put }) {
-      const data = yield call(usersService.remove, payload)
+      const data = yield call(remove, payload)
       if (data.success) {
         yield put({ type: 'updateState', payload: { selectedRowKeys: [] } })
         yield put({ type: 'query' })
@@ -86,9 +85,7 @@ export default modelExtend(pageModel, {
     },
 
     * update ({ payload }, { select, call, put }) {
-      const id = yield select(({ user }) => user.currentItem.id)
-      const newUser = { ...payload, id }
-      const data = yield call(update, newUser)
+      const data = yield call(updateGraduate, payload)
       if (data.success) {
         yield put({ type: 'hideModal' })
         yield put({ type: 'query' })
@@ -97,13 +94,32 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * check ({ payload }, { select, call, put }) {
-      const data = payload.status ? yield call(pass, { flowId: payload.flowId })
-        : yield call(reject, { flowId: payload.flowId })
-      if (data.code === '000000') {
+    * updateLedger ({ payload }, { select, call, put }) {
+      const data = yield call(updateGraduate, payload)
+      if (data.success) {
+        yield put({ type: 'hideModal' })
         yield put({ type: 'query' })
       } else {
         throw data
+      }
+    },
+
+    * queryStudent ({ payload }, { select, call, put }) {
+      const data = yield call(studentService.query, {
+        classId: payload.classId,
+        agencyId: payload.agencyId,
+        pageSize: 10000,
+      })
+      if (data.code === '000000') {
+        yield put({
+          type: 'showModal',
+          payload: { ...payload,
+            ...{
+              modalType: payload.modalType || 'update',
+              currentStudents: data.data,
+            },
+          },
+        })
       }
     },
 
@@ -112,7 +128,6 @@ export default modelExtend(pageModel, {
         ledgerId: payload.ledgerId,
         pageSize: 10000,
       })
-
       if (data.code === '000000') {
         yield put({
           type: 'showModal',
@@ -137,7 +152,7 @@ export default modelExtend(pageModel, {
     },
 
     hideModal (state) {
-      return { ...state, modalVisible: false, selectedRowKeysStudent: [] }
+      return { ...state, modalVisible: false, currentStudents: [], selectedRowKeysStudent: [] }
     },
 
     switchIsMotion (state) {

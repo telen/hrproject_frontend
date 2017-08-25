@@ -7,13 +7,13 @@ import List from './List'
 import Filter from './Filter'
 import Modal from './Modal'
 
-const LedgerCheck = ({ location, dispatch, ledgerCheck, loading }) => {
-  const { list, pagination, currentItem, modalVisible, modalType, isMotion, selectedRowKeys, currentStudents, selectedRowKeysStudent } = ledgerCheck
+const Ledger = ({ location, dispatch, ledger, loading }) => {
+  const { list, pagination, currentItem, modalVisible, modalType, isMotion, selectedRowKeys, selectedRowKeysStudent, currentStudents } = ledger
   const { pageSize } = pagination
 
   const listProps = {
     dataSource: list,
-    loading: loading.effects['ledgerCheck/query'],
+    loading: loading.effects['ledger/query'],
     pagination,
     location,
     isMotion,
@@ -28,19 +28,15 @@ const LedgerCheck = ({ location, dispatch, ledgerCheck, loading }) => {
         },
       }))
     },
-    onDeleteItem (flowId) {
-      // 审核驳回
+    onDeleteItem (id) {
       dispatch({
-        type: 'ledgerCheck/check',
-        payload: {
-          flowId,
-          status: false,
-        },
+        type: 'ledger/delete',
+        payload: id,
       })
     },
     onEditItem (item) {
       dispatch({
-        type: 'ledgerCheck/queryGraduate',
+        type: 'ledger/queryGraduate',
         payload: {
           currentItem: item,
           ledgerId: item.ledgerId,
@@ -48,14 +44,13 @@ const LedgerCheck = ({ location, dispatch, ledgerCheck, loading }) => {
         },
       })
     },
-    onEditItemPass (flowId) {
-      // 审核通过
-      console.log(flowId)
+    onEditItemLedger (item) {
       dispatch({
-        type: 'ledgerCheck/check',
+        type: 'ledger/queryStudent',
         payload: {
-          flowId,
-          status: true,
+          currentItem: item,
+          classId: item.classId,
+          modalType: 'updateLedger',
         },
       })
     },
@@ -63,7 +58,7 @@ const LedgerCheck = ({ location, dispatch, ledgerCheck, loading }) => {
     //   selectedRowKeys,
     //   onChange: (keys) => {
     //     dispatch({
-    //       type: 'ledgerCheck/updateState',
+    //       type: 'ledger/updateState',
     //       payload: {
     //         selectedRowKeys: keys,
     //       },
@@ -89,18 +84,18 @@ const LedgerCheck = ({ location, dispatch, ledgerCheck, loading }) => {
     },
     onSearch (fieldsValue) {
       fieldsValue.keyword.length ? dispatch(routerRedux.push({
-        pathname: '/ledgerCheck',
+        pathname: '/graduate/ledger',
         query: {
           field: fieldsValue.field,
           keyword: fieldsValue.keyword,
         },
       })) : dispatch(routerRedux.push({
-        pathname: '/ledgerCheck',
+        pathname: '/graduate/ledger',
       }))
     },
     onAdd () {
       dispatch({
-        type: 'ledgerCheck/showModal',
+        type: 'ledger/showModal',
         payload: {
           modalType: 'create',
         },
@@ -108,7 +103,7 @@ const LedgerCheck = ({ location, dispatch, ledgerCheck, loading }) => {
     },
     onDeleteItems () {
       dispatch({
-        type: 'ledgerCheck/multiDelete',
+        type: 'ledger/multiDelete',
         payload: {
           ids: selectedRowKeys,
         },
@@ -119,32 +114,56 @@ const LedgerCheck = ({ location, dispatch, ledgerCheck, loading }) => {
     },
   }
 
-  const modalProps = {
+  let modalProps = {
     item: modalType === 'create' ? {} : currentItem,
-    width: 1000,
+    modalType,
     currentStudents,
     selectedRowKeysStudent,
+    width: 1000,
     visible: modalVisible,
     maskClosable: false,
-    confirmLoading: loading.effects['ledgerCheck/update'],
-    title: `${modalType === 'create' ? '添加课程' : '编辑课程'}`,
+    confirmLoading: loading.effects['ledger/update'],
+    title: `${modalType === 'create' ? '添加' : '编辑'}`,
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
-        type: `ledgerCheck/${modalType}`,
+        type: `ledger/${modalType}`,
+        payload: data,
+      })
+    },
+    onLedgerOk (data) {
+      dispatch({
+        type: `ledger/${modalType}`,
         payload: data,
       })
     },
     onCancel () {
       dispatch({
-        type: 'ledgerCheck/hideModal',
+        type: 'ledger/hideModal',
       })
     },
   }
 
+  modalProps = modalType === 'updateLedger' ? {
+    ...modalProps,
+    ...{
+      rowSelection: {
+        selectedRowKeys: selectedRowKeysStudent,
+        onChange: (keys) => {
+          dispatch({
+            type: 'ledger/updateState',
+            payload: {
+              selectedRowKeysStudent: keys,
+            },
+          })
+        },
+      },
+    },
+  } : modalProps
+
   const handleDeleteItems = () => {
     dispatch({
-      type: 'ledgerCheck/multiDelete',
+      type: 'ledger/multiDelete',
       payload: {
         ids: selectedRowKeys,
       },
@@ -174,11 +193,11 @@ const LedgerCheck = ({ location, dispatch, ledgerCheck, loading }) => {
   )
 }
 
-LedgerCheck.propTypes = {
-  ledgerCheck: PropTypes.object,
+Ledger.propTypes = {
+  ledger: PropTypes.object,
   location: PropTypes.object,
   dispatch: PropTypes.func,
   loading: PropTypes.object,
 }
 
-export default connect(({ ledgerCheck, loading }) => ({ ledgerCheck, loading }))(LedgerCheck)
+export default connect(({ ledger, loading }) => ({ ledger, loading }))(Ledger)

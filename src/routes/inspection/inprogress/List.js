@@ -54,8 +54,8 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, course, ...tablePr
       },
     }, {
       title: '所属机构',
-      dataIndex: 'agent',
-      key: 'agent',
+      dataIndex: 'agencyName',
+      key: 'agencyName',
     }, {
       title: '班级开始时间',
       dataIndex: 'startTime',
@@ -68,8 +68,8 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, course, ...tablePr
       render: (text) => moment(text).format(dateFormat),
     }, {
       title: '抽查历史',
-      dataIndex: 'inspections',
-      key: 'inspections',
+      dataIndex: 'inspectionCount',
+      key: 'inspectionCount',
     }, {
       title: '操作',
       key: 'operation',

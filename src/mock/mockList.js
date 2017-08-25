@@ -1,7 +1,7 @@
 const Mock = require('mockjs')
 
 let list = Mock.mock({
-  'data|80-100': [
+  'data|1-10': [
     {
       id: '@id',
       idNumber: '@id',

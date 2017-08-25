@@ -1,7 +1,7 @@
 /* global window */
 import modelExtend from 'dva-model-extend'
 import { config } from 'utils'
-import { create, remove, update, query } from './../../services/room'
+import { create, remove, update, query, inspect } from './../../services/room'
 import * as studentService from './../../services/student'
 import { pageModel } from './../common'
 
@@ -37,7 +37,7 @@ export default modelExtend(pageModel, {
   effects: {
 
     * query ({ payload = {} }, { call, put }) {
-      const data = yield call(query, payload)
+      const data = yield call(query, { ...payload, ...{ stage: 0 } })
       if (data.code === '000000') {
         yield put({
           type: 'querySuccess',
@@ -112,6 +112,17 @@ export default modelExtend(pageModel, {
         })
       }
     },
+
+    * inspect ({ payload }, { call, put }) {
+      const data = yield call(inspect, payload)
+      if (data.code === '000000') {
+        yield put({ type: 'hideModal' })
+        yield put({ type: 'query' })
+      } else {
+        throw data
+      }
+    },
+
 
   },
 

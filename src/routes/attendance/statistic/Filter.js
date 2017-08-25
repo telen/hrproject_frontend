@@ -80,7 +80,7 @@ const Filter = ({
         <Button icon="reload" style={{ marginRight: 16 }} onClick={handleSubmit}>刷新</Button>
       </Col>
       <Col span={4}>
-        {getFieldDecorator('agentName', { initialValue: agentName })(<Search placeholder="搜索" onSearch={handleSubmit} />)}
+        {getFieldDecorator('keyword', { initialValue: filter.keyword })(<Search placeholder="搜索" onSearch={handleSubmit} />)}
       </Col>
     </Row>
   )

@@ -30,18 +30,17 @@ const Statistic = ({ location, dispatch, statistic, loading }) => {
     },
     onDeleteItem (id) {
       dispatch({
-        type: 'user/delete',
+        type: 'statistic/delete',
         payload: id,
       })
     },
     onEditItem (item) {
-      dispatch({
-        type: 'user/showModal',
-        payload: {
-          modalType: 'update',
-          currentItem: item,
+      dispatch(routerRedux.push({
+        pathname: 'attendance/record',
+        query: {
+          classId: item.classId,
         },
-      })
+      }))
     },
     // rowSelection: {
     //   selectedRowKeys,

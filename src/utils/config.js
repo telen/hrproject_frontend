@@ -31,5 +31,6 @@ module.exports = {
     room: `${APIV1}/class`,
     audit: `${APIV1}/audit`,
     attendanceRecord: `${APIV1}/attendance`,
+    ledger: `${APIV1}/ledger`,
   },
 }

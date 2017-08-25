@@ -7,13 +7,13 @@ import List from './List'
 import Filter from './Filter'
 import Modal from './Modal'
 
-const Statistic = ({ location, dispatch, statistic, loading }) => {
-  const { list, pagination, currentItem, modalVisible, modalType, isMotion, selectedRowKeys } = statistic
+const Statistic = ({ location, dispatch, graduate, loading }) => {
+  const { list, pagination, currentItem, modalVisible, modalType, isMotion, selectedRowKeys, selectedRowKeysStudent, currentStudents } = graduate
   const { pageSize } = pagination
 
   const listProps = {
     dataSource: list,
-    loading: loading.effects['statistic/query'],
+    loading: loading.effects['graduate/query'],
     pagination,
     location,
     isMotion,
@@ -30,30 +30,40 @@ const Statistic = ({ location, dispatch, statistic, loading }) => {
     },
     onDeleteItem (id) {
       dispatch({
-        type: 'user/delete',
+        type: 'graduate/delete',
         payload: id,
       })
     },
     onEditItem (item) {
       dispatch({
-        type: 'user/showModal',
+        type: 'graduate/queryStudent',
         payload: {
-          modalType: 'update',
           currentItem: item,
+          classId: item.classId,
         },
       })
     },
-    rowSelection: {
-      selectedRowKeys,
-      onChange: (keys) => {
-        dispatch({
-          type: 'statistic/updateState',
-          payload: {
-            selectedRowKeys: keys,
-          },
-        })
-      },
+    onEditItemLedger (item) {
+      dispatch({
+        type: 'graduate/queryGraduate',
+        payload: {
+          currentItem: item,
+          classId: item.classId,
+          modalType: 'updateLedger',
+        },
+      })
     },
+    // rowSelection: {
+    //   selectedRowKeys,
+    //   onChange: (keys) => {
+    //     dispatch({
+    //       type: 'graduate/updateState',
+    //       payload: {
+    //         selectedRowKeys: keys,
+    //       },
+    //     })
+    //   },
+    // },
   }
 
   const filterProps = {
@@ -84,7 +94,7 @@ const Statistic = ({ location, dispatch, statistic, loading }) => {
     },
     onAdd () {
       dispatch({
-        type: 'statistic/showModal',
+        type: 'graduate/showModal',
         payload: {
           modalType: 'create',
         },
@@ -92,7 +102,7 @@ const Statistic = ({ location, dispatch, statistic, loading }) => {
     },
     onDeleteItems () {
       dispatch({
-        type: 'statistic/multiDelete',
+        type: 'graduate/multiDelete',
         payload: {
           ids: selectedRowKeys,
         },
@@ -103,30 +113,57 @@ const Statistic = ({ location, dispatch, statistic, loading }) => {
     },
   }
 
-  const modalProps = {
+  let modalProps = {
     item: modalType === 'create' ? {} : currentItem,
+    modalType,
+    currentStudents,
+    selectedRowKeysStudent,
     width: 1000,
     visible: modalVisible,
     maskClosable: false,
-    confirmLoading: loading.effects['statistic/update'],
-    title: `${modalType === 'create' ? '添加课程' : '编辑课程'}`,
+    confirmLoading: loading.effects['graduate/update'],
+    title: `${modalType === 'create' ? '添加' : '编辑'}`,
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
-        type: `statistic/${modalType}`,
+        type: `graduate/${modalType}`,
+        payload: data,
+      })
+    },
+    onLedgerOk (data) {
+      // 生成台账 updateLedger
+      dispatch({
+        type: `graduate/${modalType}`,
         payload: data,
       })
     },
     onCancel () {
       dispatch({
-        type: 'statistic/hideModal',
+        type: 'graduate/hideModal',
       })
     },
   }
 
+  modalProps = modalType === 'updateLedger' ? {
+    ...modalProps,
+    ...{
+      rowSelection: {
+        selectedRowKeys: selectedRowKeysStudent,
+        onChange: (keys) => {
+          dispatch({
+            type: 'graduate/updateState',
+            payload: {
+              selectedRowKeysStudent: keys,
+            },
+          })
+        },
+      },
+    },
+  } : modalProps
+
   const handleDeleteItems = () => {
     dispatch({
-      type: 'statistic/multiDelete',
+      type: 'graduate/multiDelete',
       payload: {
         ids: selectedRowKeys,
       },
@@ -134,10 +171,11 @@ const Statistic = ({ location, dispatch, statistic, loading }) => {
   }
 
   const ModalGen = () => <Modal {...modalProps} />
+  const FilterGen = () => <Filter {...filterProps} />
 
   return (
     <div className="content-inner">
-      <Filter {...filterProps} />
+      <FilterGen />
       {
         -1 > 0 &&
         <Row style={{ marginBottom: 24, textAlign: 'right', fontSize: 13 }}>
@@ -156,10 +194,10 @@ const Statistic = ({ location, dispatch, statistic, loading }) => {
 }
 
 Statistic.propTypes = {
-  statistic: PropTypes.object,
+  graduate: PropTypes.object,
   location: PropTypes.object,
   dispatch: PropTypes.func,
   loading: PropTypes.object,
 }
 
-export default connect(({ statistic, loading }) => ({ statistic, loading }))(Statistic)
+export default connect(({ graduate, loading }) => ({ graduate, loading }))(Statistic)
