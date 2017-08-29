@@ -76,190 +76,202 @@ const modal = ({
           </FormItem>
 
           <Row>
-            <Col span={8}>
-              <FormItem label="公民身份证号" hasFeedback {...formItemLayout}>
-                {getFieldDecorator('idNumber', {
-                  initialValue: item.idNumber,
-                  rules: [
-                    {
-                      required: true,
-                    },
-                  ],
-                })(<Input />)}
-              </FormItem>
-            </Col>
-            <Col span={8}>
-              <FormItem label="姓名" hasFeedback {...formItemLayout}>
-                {getFieldDecorator('studentName', {
-                  initialValue: item.studentName,
-                  rules: [
-                    {
-                      required: true,
-                    },
-                  ],
-                })(<Input />)}
-              </FormItem>
-            </Col>
-            <Col span={8}>
-              <FormItem label="性别" hasFeedback {...formItemLayout}>
-                {getFieldDecorator('gender', {
-                  initialValue: item.gender !== undefined ? `${item.gender}` : '',
-                  rules: [
-                    {
-                      required: true,
-                    },
-                  ],
-                })(<Radio.Group>
-                  <Radio value="0">男</Radio>
-                  <Radio value="1">女</Radio>
-                </Radio.Group>)}
-              </FormItem>
-            </Col>
-          </Row>
+            <Col span={20}>
 
-          <Row>
-            <Col span={8}>
-              <FormItem label="民族" hasFeedback {...formItemLayout}>
-                {getFieldDecorator('nationality', {
-                  initialValue: item.nationality,
-                  rules: [
-                    {
-                      required: false,
-                    },
-                  ],
-                })(<Select>
-                  <Option value="han">汉族</Option>
-                  <Option value="hui">回族</Option>
-                </Select>)}
-              </FormItem>
-            </Col>
-            <Col span={8}>
-              <FormItem label="出生日期" hasFeedback {...formItemLayout}>
-                {getFieldDecorator('birthday', {
-                  initialValue: moment(item.birthday),
-                  rules: [
-                    {
-                      required: true,
-                    },
-                  ],
-                })(<DatePicker format={dateFormat} />)}
-              </FormItem>
-            </Col>
-            <Col span={8}>
-              <FormItem label="户口所在地" hasFeedback {...formItemLayout}>
-                {getFieldDecorator('registeredResidence', {
-                  initialValue: item.registeredResidence,
-                  rules: [
-                    {
-                      required: true,
-                    },
-                  ],
-                })(<Input />)}
-              </FormItem>
-            </Col>
-          </Row>
+              <Row>
+                <Col span={8}>
+                  <FormItem label="公民身份证号" hasFeedback {...formItemLayout}>
+                    {getFieldDecorator('idNumber', {
+                      initialValue: item.idNumber,
+                      rules: [
+                        {
+                          required: true,
+                        },
+                      ],
+                    })(<Input />)}
+                  </FormItem>
+                </Col>
+                <Col span={8}>
+                  <FormItem label="姓名" hasFeedback {...formItemLayout}>
+                    {getFieldDecorator('studentName', {
+                      initialValue: item.studentName,
+                      rules: [
+                        {
+                          required: true,
+                        },
+                      ],
+                    })(<Input />)}
+                  </FormItem>
+                </Col>
+                <Col span={8}>
+                  <FormItem label="性别" hasFeedback {...formItemLayout}>
+                    {getFieldDecorator('gender', {
+                      initialValue: item.gender !== undefined ? `${item.gender}` : '',
+                      rules: [
+                        {
+                          required: true,
+                        },
+                      ],
+                    })(<Radio.Group>
+                      <Radio value="0">男</Radio>
+                      <Radio value="1">女</Radio>
+                    </Radio.Group>)}
+                  </FormItem>
+                </Col>
+              </Row>
 
-          <Row style={{ marginBottom: '18px' }}>
-            <Col offset={1}>
+              <Row>
+                <Col span={8}>
+                  <FormItem label="民族" hasFeedback {...formItemLayout}>
+                    {getFieldDecorator('nationality', {
+                      initialValue: item.nationality,
+                      rules: [
+                        {
+                          required: false,
+                        },
+                      ],
+                    })(<Select>
+                      <Option value="han">汉族</Option>
+                      <Option value="hui">回族</Option>
+                    </Select>)}
+                  </FormItem>
+                </Col>
+                <Col span={8}>
+                  <FormItem label="出生日期" hasFeedback {...formItemLayout}>
+                    {getFieldDecorator('birthday', {
+                      initialValue: moment(item.birthday),
+                      rules: [
+                        {
+                          required: true,
+                        },
+                      ],
+                    })(<DatePicker format={dateFormat} />)}
+                  </FormItem>
+                </Col>
+                <Col span={8}>
+                  <FormItem label="户口所在地" hasFeedback {...formItemLayout}>
+                    {getFieldDecorator('registeredResidence', {
+                      initialValue: item.registeredResidence,
+                      rules: [
+                        {
+                          required: true,
+                        },
+                      ],
+                    })(<Input />)}
+                  </FormItem>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col span={8}>
+                  <FormItem label="婚姻状况" hasFeedback {...formItemLayout}>
+                    {getFieldDecorator('maritalStatus', {
+                      initialValue: item.maritalStatus !== undefined ? `${item.maritalStatus}` : '',
+                      rules: [
+                        {
+                          required: false,
+                        },
+                      ],
+                    })(<Select>
+                      <Option value="0">已婚</Option>
+                      <Option value="1">未婚</Option>
+                      <Option value="2">离异</Option>
+                    </Select>)}
+                  </FormItem>
+                </Col>
+                <Col span={8}>
+                  <FormItem label="政治面貌" hasFeedback {...formItemLayout}>
+                    {getFieldDecorator('politicalOutlook', {
+                      initialValue: item.politicalOutlook,
+                      rules: [
+                        {
+                          required: false,
+                        },
+                      ],
+                    })(<Select>
+                      <Option value="people">群众</Option>
+                      <Option value="gongchandang">共产党员</Option>
+                      <Option value="others">其他政党</Option>
+                    </Select>)}
+                  </FormItem>
+                </Col>
+                <Col span={8}>
+                  <FormItem label="是否参保" hasFeedback {...formItemLayout}>
+                    {getFieldDecorator('insuredStatus', {
+                      initialValue: item.insuredStatus !== undefined ? `${item.insuredStatus}` : '',
+                      rules: [
+                        {
+                          required: true,
+                        },
+                      ],
+                    })(<Select>
+                      <Option value="0">是</Option>
+                      <Option value="1">否</Option>
+                    </Select>)}
+                  </FormItem>
+                </Col>
+              </Row>
+
+              <Row>
+                <Col span={8}>
+                  <FormItem label="手机号码" hasFeedback {...formItemLayout}>
+                    {getFieldDecorator('mobile', {
+                      initialValue: item.mobile,
+                      rules: [
+                        {
+                          required: true,
+                          pattern: /^1[34578]\d{9}$/,
+                          message: 'The input is not valid phone!',
+                        },
+                      ],
+                    })(<Input />)}
+                  </FormItem>
+                </Col>
+                <Col span={8}>
+                  <FormItem label="邮箱" hasFeedback {...formItemLayout}>
+                    {getFieldDecorator('email', {
+                      initialValue: item.email,
+                      rules: [
+                        {
+                          required: false,
+                          pattern: /^([a-zA-Z0-9_-]|\.)+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/,
+                          message: 'The input is not valid E-mail!',
+                        },
+                      ],
+                    })(<Input />)}
+                  </FormItem>
+                </Col>
+                <Col span={8}>
+                  <FormItem label="登记就/失业状态" hasFeedback {...formItemLayout}>
+                    {getFieldDecorator('workStatus', {
+                      initialValue: item.workStatus !== undefined ? `${item.workStatus}` : '',
+                      rules: [
+                        {
+                          required: true,
+                        },
+                      ],
+                    })(<Select>
+                      <Option value="0">就业</Option>
+                      <Option value="1">失业</Option>
+                    </Select>)}
+                  </FormItem>
+                </Col>
+              </Row>
+
+            </Col>
+
+            <Col span={3}>
+              <div className={styles.images}>
+                <img src="https://dummyimage.com/128x142" alt="user profile" />
+              </div>
+              <div className={styles.btn} style={{ marginBottom: '15px' }}>
+                <Button>录入指纹</Button>
+              </div>
+
               <Button type="primary">读取身份证信息</Button>
             </Col>
           </Row>
 
-          <Row>
-            <Col span={8}>
-              <FormItem label="婚姻状况" hasFeedback {...formItemLayout}>
-                {getFieldDecorator('maritalStatus', {
-                  initialValue: item.maritalStatus !== undefined ? `${item.maritalStatus}` : '',
-                  rules: [
-                    {
-                      required: false,
-                    },
-                  ],
-                })(<Select>
-                  <Option value="0">已婚</Option>
-                  <Option value="1">未婚</Option>
-                  <Option value="2">离异</Option>
-                </Select>)}
-              </FormItem>
-            </Col>
-            <Col span={8}>
-              <FormItem label="政治面貌" hasFeedback {...formItemLayout}>
-                {getFieldDecorator('politicalOutlook', {
-                  initialValue: item.politicalOutlook,
-                  rules: [
-                    {
-                      required: false,
-                    },
-                  ],
-                })(<Select>
-                  <Option value="people">群众</Option>
-                  <Option value="gongchandang">共产党员</Option>
-                  <Option value="others">其他政党</Option>
-                </Select>)}
-              </FormItem>
-            </Col>
-            <Col span={8}>
-              <FormItem label="是否参保" hasFeedback {...formItemLayout}>
-                {getFieldDecorator('insuredStatus', {
-                  initialValue: item.insuredStatus !== undefined ? `${item.insuredStatus}` : '',
-                  rules: [
-                    {
-                      required: true,
-                    },
-                  ],
-                })(<Select>
-                  <Option value="0">是</Option>
-                  <Option value="1">否</Option>
-                </Select>)}
-              </FormItem>
-            </Col>
-          </Row>
-
-          <Row>
-            <Col span={8}>
-              <FormItem label="手机号码" hasFeedback {...formItemLayout}>
-                {getFieldDecorator('mobile', {
-                  initialValue: item.mobile,
-                  rules: [
-                    {
-                      required: true,
-                      pattern: /^1[34578]\d{9}$/,
-                      message: 'The input is not valid phone!',
-                    },
-                  ],
-                })(<Input />)}
-              </FormItem>
-            </Col>
-            <Col span={8}>
-              <FormItem label="邮箱" hasFeedback {...formItemLayout}>
-                {getFieldDecorator('email', {
-                  initialValue: item.email,
-                  rules: [
-                    {
-                      required: false,
-                      pattern: /^([a-zA-Z0-9_-]|\.)+@([a-zA-Z0-9_-])+(.[a-zA-Z0-9_-])+/,
-                      message: 'The input is not valid E-mail!',
-                    },
-                  ],
-                })(<Input />)}
-              </FormItem>
-            </Col>
-            <Col span={8}>
-              <FormItem label="登记就/失业状态" hasFeedback {...formItemLayout}>
-                {getFieldDecorator('workStatus', {
-                  initialValue: item.workStatus !== undefined ? `${item.workStatus}` : '',
-                  rules: [
-                    {
-                      required: true,
-                    },
-                  ],
-                })(<Select>
-                  <Option value="0">就业</Option>
-                  <Option value="1">失业</Option>
-                </Select>)}
-              </FormItem>
-            </Col>
-          </Row>
         </div>
 
         <p className={styles.formLabel}><Icon type="file-text" /> 补充信息</p>

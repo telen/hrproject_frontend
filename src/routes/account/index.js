@@ -7,13 +7,14 @@ import List from './List'
 import Filter from './Filter'
 import Modal from './Modal'
 
-const Statistic = ({ location, dispatch, statistic, loading }) => {
-  const { list, pagination, currentItem, modalVisible, modalType, isMotion, selectedRowKeys } = statistic
+const Account = ({ location, dispatch, account, loading, agentMgt }) => {
+  const { list, pagination, currentItem, modalVisible, modalType, isMotion, selectedRowKeys, currentUser, roleMap } = account
   const { pageSize } = pagination
 
   const listProps = {
     dataSource: list,
-    loading: loading.effects['statistic/query'],
+    roleMap,
+    loading: loading.effects['account/query'],
     pagination,
     location,
     isMotion,
@@ -30,23 +31,24 @@ const Statistic = ({ location, dispatch, statistic, loading }) => {
     },
     onDeleteItem (id) {
       dispatch({
-        type: 'statistic/delete',
+        type: 'account/delete',
         payload: id,
       })
     },
     onEditItem (item) {
-      dispatch(routerRedux.push({
-        pathname: '/attendance/record',
-        query: {
-          classId: item.classId,
+      dispatch({
+        type: 'account/showModal',
+        payload: {
+          modalType: 'update',
+          currentItem: item,
         },
-      }))
+      })
     },
     // rowSelection: {
     //   selectedRowKeys,
     //   onChange: (keys) => {
     //     dispatch({
-    //       type: 'statistic/updateState',
+    //       type: 'account/updateState',
     //       payload: {
     //         selectedRowKeys: keys,
     //       },
@@ -56,6 +58,7 @@ const Statistic = ({ location, dispatch, statistic, loading }) => {
   }
 
   const filterProps = {
+    currentUser,
     isMotion,
     filter: {
       ...location.query,
@@ -72,18 +75,26 @@ const Statistic = ({ location, dispatch, statistic, loading }) => {
     },
     onSearch (fieldsValue) {
       fieldsValue.keyword.length ? dispatch(routerRedux.push({
-        pathname: '/attendance/statistic',
+        pathname: '/account',
         query: {
           field: fieldsValue.field,
           keyword: fieldsValue.keyword,
         },
       })) : dispatch(routerRedux.push({
-        pathname: '/attendance/statistic',
+        pathname: '/account',
       }))
     },
     onAdd () {
       dispatch({
-        type: 'statistic/showModal',
+        type: 'account/showModal',
+        payload: {
+          modalType: 'create',
+        },
+      })
+    },
+    onAddAdmin () {
+      dispatch({
+        type: 'account/showModal',
         payload: {
           modalType: 'create',
         },
@@ -91,7 +102,7 @@ const Statistic = ({ location, dispatch, statistic, loading }) => {
     },
     onDeleteItems () {
       dispatch({
-        type: 'statistic/multiDelete',
+        type: 'account/multiDelete',
         payload: {
           ids: selectedRowKeys,
         },
@@ -103,29 +114,31 @@ const Statistic = ({ location, dispatch, statistic, loading }) => {
   }
 
   const modalProps = {
+    agentMgt,
+    currentUser,
     item: modalType === 'create' ? {} : currentItem,
     width: 1000,
     visible: modalVisible,
     maskClosable: false,
-    confirmLoading: loading.effects['statistic/update'],
-    title: `${modalType === 'create' ? '添加课程' : '编辑课程'}`,
+    confirmLoading: loading.effects['account/update'],
+    title: `${modalType === 'create' ? '添加账号' : '编辑'}`,
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
-        type: `statistic/${modalType}`,
+        type: `account/${modalType}`,
         payload: data,
       })
     },
     onCancel () {
       dispatch({
-        type: 'statistic/hideModal',
+        type: 'account/hideModal',
       })
     },
   }
 
   const handleDeleteItems = () => {
     dispatch({
-      type: 'statistic/multiDelete',
+      type: 'account/multiDelete',
       payload: {
         ids: selectedRowKeys,
       },
@@ -133,10 +146,11 @@ const Statistic = ({ location, dispatch, statistic, loading }) => {
   }
 
   const ModalGen = () => <Modal {...modalProps} />
+  const FilterGen = () => <Filter {...filterProps} />
 
   return (
     <div className="content-inner">
-      <Filter {...filterProps} />
+      <FilterGen />
       {
         -1 > 0 &&
         <Row style={{ marginBottom: 24, textAlign: 'right', fontSize: 13 }}>
@@ -154,11 +168,12 @@ const Statistic = ({ location, dispatch, statistic, loading }) => {
   )
 }
 
-Statistic.propTypes = {
-  statistic: PropTypes.object,
+Account.propTypes = {
+  account: PropTypes.object,
   location: PropTypes.object,
   dispatch: PropTypes.func,
   loading: PropTypes.object,
+  agentMgt: PropTypes.object,
 }
 
-export default connect(({ statistic, loading }) => ({ statistic, loading }))(Statistic)
+export default connect(({ account, loading, agentMgt }) => ({ account, loading, agentMgt }))(Account)

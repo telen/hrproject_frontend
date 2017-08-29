@@ -50,8 +50,8 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, ...tableProps }) =
       key: 'agencyMobile',
     }, {
       title: '申请人邮箱',
-      dataIndex: 'agencyEmail',
-      key: 'agencyEmail',
+      dataIndex: 'agencyMail',
+      key: 'agencyMail',
     }, {
       title: '上级主管部门',
       dataIndex: 'superiorDepartment',

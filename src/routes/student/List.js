@@ -113,7 +113,7 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, course, ...tablePr
         scroll={{ x: 1250 }}
         columns={columns}
         simple
-        rowKey={record => record.idNumber}
+        rowKey={record => record.studentId}
       />
     </div>
   )

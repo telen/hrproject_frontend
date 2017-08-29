@@ -32,6 +32,7 @@ export default modelExtend(pageModel, {
           || location.pathname === '/inspection/inspectionInprogress'
           || location.pathname === '/inspection/inspectionBefore'
           || location.pathname === '/inspection/inspectionAfter'
+          || location.pathname === '/account'
         ) {
           dispatch({
             type: 'query',
@@ -52,7 +53,7 @@ export default modelExtend(pageModel, {
         yield put({
           type: 'querySuccess',
           payload: {
-            list: data.data,
+            list: data.data || [],
             pagination: {
               current: Number(payload.page) || 1,
               pageSize: Number(payload.pageSize) || 10,

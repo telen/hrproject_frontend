@@ -126,6 +126,24 @@ const Routers = function ({ history, app }) {
             }, 'attendance-statistic')
           },
         }, {
+          path: 'attendance/fingerprint',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/attendance/finger'))
+              registerModel(app, require('models/room'))
+              cb(null, require('routes/attendance/finger/'))
+            }, 'attendance-finger')
+          },
+        }, {
+          path: 'attendance/face',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/attendance/face'))
+              registerModel(app, require('models/room'))
+              cb(null, require('routes/attendance/face/'))
+            }, 'attendance-face')
+          },
+        }, {
           path: 'graduate/statistic',
           getComponent (nextState, cb) {
             require.ensure([], (require) => {
@@ -203,6 +221,15 @@ const Routers = function ({ history, app }) {
               registerModel(app, require('models/ledgerCheck'))
               cb(null, require('routes/ledgerCheck/'))
             }, 'ledgerCheck')
+          },
+        }, {
+          path: 'account',
+          getComponent (nextState, cb) {
+            require.ensure([], (require) => {
+              registerModel(app, require('models/account'))
+              registerModel(app, require('models/agentMgt'))
+              cb(null, require('routes/account/'))
+            }, 'account')
           },
         }, {
           path: 'UIElement/iconfont',

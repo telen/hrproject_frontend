@@ -5,7 +5,8 @@ const config = require('../utils/config')
 
 const { apiPrefix } = config
 
-const host = '192.168.199.220:8080'
+const hostq = '192.168.199.220:8080'
+const host = '192.168.199.152:8080'
 const enableMock = true
 
 let usersListData = Mock.mock({
@@ -47,7 +48,7 @@ const EnumRoleType = {
 const userPermission = {
   DEFAULT: {
     visit: ['17081814132521025493','17081814132521025494','17081814132521025495','17081814132521025497','17081814132521025498','17081814132521025499','17081814132521025500','17081814132521025501','17081814132521025502','17081814132521025503','17081814132521025504','17081814132521025505','17081814132521025506','17081814132521025507','17081814132521025508','17081814132521025509','17081814132521025510','17081814132521025511','17081814132521025512',
-    '17081814132521025513', '17081814132521025514','17081814132521025515','17081814132521025516','17081814132521025517','17081814132521025518','17081814132521025519','17081814132521025520'],
+    '17081814132521025513', '17081814132521025514','17081814132521025515','17081814132521025516','17081814132521025517','17081814132521025518','17081814132521025519','17081814132521025520','17081814132521025521'],
     role: EnumRoleType.DEFAULT,
   },
   AGENCT: {
@@ -75,7 +76,7 @@ const adminUsers = [
     password: 'admin',
     permissions: userPermission.ADMIN,
   }, {
-    id: 17081610203221032122,
+    id: 17081815504021040605,
     username: 'guest',
     password: 'guest',
     permissions: userPermission.DEFAULT,
@@ -193,14 +194,13 @@ module.exports = {
       response.success = true
       if (response.success) {
         // const userItem = adminUsers.filter(_ => _.id === token.id)
-        console.log(cookies.token)
         const userItem = adminUsers.filter(_ => _.id == cookies.token)
-        console.log(userItem)
         if (userItem.length > 0) {
           // user.authorityList = userItem[0].permissions
           user.userName = userItem[0].username
           user.userId = userItem[0].id
           user.role = userItem[0].permissions.role
+          user.roleId = '17081610225621055995'
           user.authorityList = userItem[0].permissions.visit
         }
       }

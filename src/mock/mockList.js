@@ -54,6 +54,8 @@ let list = Mock.mock({
       'status|0-3': 0,
       'insuredStatus|0-1': 0,
       'maritalStatus|0-2': 0,
+      'roleId|1': ['17081610225621055995', '17081610225621055996', '17081610225621055997'],
+      'userName': '@cname',
     },
   ],
 })

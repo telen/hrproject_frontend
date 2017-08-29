@@ -1,8 +1,11 @@
 const { config } = require('./common')
 const axios = require('axios')
+const mockList = require('./mockList')
 
 const { apiPrefix } = config
+const hostq = '192.168.199.220:8080'
 const host = '192.168.199.152:8080'
+const enableMock = false
 
 let database = [
   {
@@ -300,6 +303,13 @@ let database = [
     icon: 'file-text',
     route: '/ledgerCheck',
   },
+  {
+    id: '17081814132521025521',
+    bpid: '17081814132521025493',
+    name: '账户管理',
+    icon: 'file-text',
+    route: '/account',
+  },
   // {
   //   id: '6',
   //   bpid: '1',
@@ -362,5 +372,57 @@ module.exports = {
     //     console.error(error)
     //     res.json({ ret: false })
     //   })
+  },
+
+  [`GET ${apiPrefix}/security/accounts`] (req, res) {
+    const { query } = req
+    let { pageSize, page, ...other } = query
+    pageSize = pageSize || 10
+    page = page || 1
+
+    if (enableMock) {
+      res.status(200).json({
+        code: '000000',
+        data: mockList.data.slice((page - 1) * pageSize, page * pageSize),
+        total: mockList.data.length,
+      })
+    } else {
+      axios.defaults.headers.Cookie = req.headers.cookie
+      axios.get(`http://${host}${apiPrefix}/security/accounts`, {
+        params: req.query,
+      })
+        .then(function (response) {
+          res.json(response.data)
+        })
+        .catch(function (error) {
+          console.error(error)
+          res.json({ ret: false })
+        })
+    }
+  },
+
+  [`POST ${apiPrefix}/security/assign`] (req, res) {
+    const { query } = req
+    let { pageSize, page, ...other } = query
+    pageSize = pageSize || 10
+    page = page || 1
+
+    if (enableMock) {
+      res.status(200).json({
+        code: '000000',
+        data: mockList.data.slice((page - 1) * pageSize, page * pageSize),
+        total: mockList.data.length,
+      })
+    } else {
+      axios.defaults.headers.Cookie = req.headers.cookie
+      axios.post(`http://${host}${apiPrefix}/security/assign`, req.body)
+        .then(function (response) {
+          res.json(response.data)
+        })
+        .catch(function (error) {
+          console.error(error)
+          res.json({ ret: false })
+        })
+    }
   },
 }

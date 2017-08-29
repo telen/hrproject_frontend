@@ -5,7 +5,6 @@ import { FilterItem } from 'components'
 import { Form, Button, Row, Col, Input, Select } from 'antd'
 
 const Search = Input.Search
-const FormItem = Form.Item
 const Option = Select.Option
 
 const ColProps = {
@@ -25,8 +24,8 @@ const Filter = ({
   onAdd,
   onFilterChange,
   onDeleteItems,
-  course,
   filter,
+  room,
   form: {
     getFieldDecorator,
     getFieldsValue,
@@ -64,10 +63,10 @@ const Filter = ({
 
   const handleChange = (value) => {
     let fields = getFieldsValue()
-    fields.courseId = value
-
+    fields.classId = value
     onFilterChange(fields)
   }
+  const { agentName } = filter
 
   let initialCreateTime = []
   if (filter.createTime && filter.createTime[0]) {
@@ -80,27 +79,17 @@ const Filter = ({
   return (
     <Row gutter={24} type="flex" justify="space-between">
       <Col {...ColProps} >
-        <Button type="primary" style={{ marginRight: 16 }} icon="plus" onClick={onAdd}>添加用户</Button>
-        <Button icon="delete" style={{ marginRight: 16 }} onClick={onDeleteItems} >批量删除</Button>
         <Button icon="reload" style={{ marginRight: 16 }} onClick={handleSubmit}>刷新</Button>
       </Col>
       <Col span={4}>
-        {getFieldDecorator('courseId', {
-          initialValue: filter.courseId || '',
-          rules: [
-            {
-              required: false,
-            },
-          ],
-        })(<Select
-          onChange={handleChange}
+        {getFieldDecorator('classId', { initialValue: filter.classId })(<Select
           allowClear={true}
-          placeholder="请选择课程"
-          className="ant-input-affix-wrapper"
-        >
+          onChange={handleChange}
+          placeholder="请选择班级"
+          className="ant-input-affix-wrapper">
           {
-            course.list.map((item) => {
-              return <Option key={item.courseId} value={item.courseId}>{item.courseName}</Option>
+            room.list.map((item) => {
+              return <Option key={item.classId} value={item.classId}>{item.classname}</Option>
             })
           }
         </Select>)}
@@ -112,10 +101,10 @@ const Filter = ({
 Filter.propTypes = {
   onAdd: PropTypes.func,
   form: PropTypes.object,
-  course: PropTypes.object,
   filter: PropTypes.object,
   onFilterChange: PropTypes.func,
   onDeleteItems: PropTypes.func,
+  room: PropTypes.object,
 }
 
 export default Form.create()(Filter)

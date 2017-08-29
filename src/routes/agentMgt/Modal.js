@@ -55,15 +55,15 @@ const modal = ({
         <div className={styles.formFields}>
           <Row>
             <Col span={8}>
-              <FormItem label="机构id" hasFeedback {...formItemLayout}>
+              <FormItem label="机构编号" hasFeedback {...formItemLayout}>
                 {getFieldDecorator('agencyId', {
                   initialValue: item.agencyId,
                   rules: [
                     {
-                      required: true,
+                      required: false,
                     },
                   ],
-                })(<Input />)}
+                })(<Input readOnly={true} />)}
               </FormItem>
             </Col>
             <Col span={8}>
@@ -107,8 +107,8 @@ const modal = ({
             </Col>
             <Col span={8}>
               <FormItem label="邮箱" hasFeedback {...formItemLayout}>
-                {getFieldDecorator('agencyEmail', {
-                  initialValue: item.agencyEmail,
+                {getFieldDecorator('agencyMail', {
+                  initialValue: item.agencyMail,
                   rules: [
                     {
                       required: true,

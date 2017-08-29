@@ -32,5 +32,6 @@ module.exports = {
     audit: `${APIV1}/audit`,
     attendanceRecord: `${APIV1}/attendance`,
     ledger: `${APIV1}/ledger`,
+    account: `${APIV1}/security`,
   },
 }

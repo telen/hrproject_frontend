@@ -42,12 +42,12 @@ const List = ({ onDeleteItem, onEditItem, onApplyItem, isMotion, location, cours
       key: 'predictedCount',
     }, {
       title: '教师姓名',
-      dataIndex: 'teacher',
-      key: 'teacher',
+      dataIndex: 'teachername',
+      key: 'teachername',
     }, {
       title: '所属课程',
-      dataIndex: 'course',
-      key: 'course',
+      dataIndex: 'courseName',
+      key: 'courseName',
       render: (text) => {
         const courseItem = course.list.filter((item) => { return item.courseId === text })
 
@@ -59,8 +59,8 @@ const List = ({ onDeleteItem, onEditItem, onApplyItem, isMotion, location, cours
       key: 'affiliatedProfession',
     }, {
       title: '所属机构',
-      dataIndex: 'agentName',
-      key: 'agentName',
+      dataIndex: 'agencyName',
+      key: 'agencyName',
     }, {
       title: '开班时间',
       dataIndex: 'startTime',

@@ -5,7 +5,8 @@ const mockList = require('./mockList')
 const { apiPrefix } = config
 let database = posts
 
-const host = '192.168.199.220:8080'
+const hostq = '192.168.199.220:8080'
+const host = '192.168.199.152:8080'
 const enableMock = true
 
 module.exports = {

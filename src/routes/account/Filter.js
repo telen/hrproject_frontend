@@ -2,11 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import { FilterItem } from 'components'
-import { Form, Button, Row, Col, Input, Select } from 'antd'
+import { Form, Button, Row, Col, Input } from 'antd'
 
 const Search = Input.Search
-const FormItem = Form.Item
-const Option = Select.Option
 
 const ColProps = {
   xs: 24,
@@ -22,10 +20,11 @@ const TwoColProps = {
 }
 
 const Filter = ({
+  currentUser,
   onAdd,
+  onAddAdmin,
   onFilterChange,
   onDeleteItems,
-  course,
   filter,
   form: {
     getFieldDecorator,
@@ -62,10 +61,9 @@ const Filter = ({
     handleSubmit()
   }
 
-  const handleChange = (value) => {
+  const handleChange = (key, values) => {
     let fields = getFieldsValue()
-    fields.courseId = value
-
+    fields[key] = values
     onFilterChange(fields)
   }
 
@@ -77,33 +75,33 @@ const Filter = ({
     initialCreateTime[1] = moment(filter.createTime[1])
   }
 
-  return (
-    <Row gutter={24} type="flex" justify="space-between">
+  let menus = null
+  if (currentUser.roleId === '17081610225621055995') {
+    menus = (
       <Col {...ColProps} >
-        <Button type="primary" style={{ marginRight: 16 }} icon="plus" onClick={onAdd}>添加用户</Button>
+        <Button type="primary" style={{ marginRight: 16 }} icon="plus" onClick={onAddAdmin}>添加人社局账号</Button>
+        <Button type="primary" style={{ marginRight: 16 }} icon="plus" onClick={onAdd}>添加机构账号</Button>
         <Button icon="delete" style={{ marginRight: 16 }} onClick={onDeleteItems} >批量删除</Button>
         <Button icon="reload" style={{ marginRight: 16 }} onClick={handleSubmit}>刷新</Button>
       </Col>
+    )
+  } else if (currentUser.roleId === '17081610225621055996') {
+    menus = (
+      <Col {...ColProps} >
+        <Button type="primary" style={{ marginRight: 16 }} icon="plus" onClick={onAdd}>添加机构账号</Button>
+        <Button icon="reload" style={{ marginRight: 16 }} onClick={handleSubmit}>刷新</Button>
+      </Col>
+    )
+  }
+
+  return (
+    <Row gutter={24} type="flex" justify="space-between">
+      <Col {...ColProps} >
+        <Button type="primary" style={{ marginRight: 16 }} icon="plus" onClick={onAdd}>添加账号</Button>
+        <Button icon="reload" style={{ marginRight: 16 }} onClick={handleSubmit}>刷新</Button>
+      </Col>
       <Col span={4}>
-        {getFieldDecorator('courseId', {
-          initialValue: filter.courseId || '',
-          rules: [
-            {
-              required: false,
-            },
-          ],
-        })(<Select
-          onChange={handleChange}
-          allowClear={true}
-          placeholder="请选择课程"
-          className="ant-input-affix-wrapper"
-        >
-          {
-            course.list.map((item) => {
-              return <Option key={item.courseId} value={item.courseId}>{item.courseName}</Option>
-            })
-          }
-        </Select>)}
+
       </Col>
     </Row>
   )
@@ -111,11 +109,12 @@ const Filter = ({
 
 Filter.propTypes = {
   onAdd: PropTypes.func,
+  onAddAdmin: PropTypes.func,
   form: PropTypes.object,
-  course: PropTypes.object,
   filter: PropTypes.object,
   onFilterChange: PropTypes.func,
   onDeleteItems: PropTypes.func,
+  currentUser: PropTypes.object,
 }
 
 export default Form.create()(Filter)

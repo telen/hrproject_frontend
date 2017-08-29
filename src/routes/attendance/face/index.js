@@ -7,13 +7,14 @@ import List from './List'
 import Filter from './Filter'
 import Modal from './Modal'
 
-const Statistic = ({ location, dispatch, statistic, loading }) => {
-  const { list, pagination, currentItem, modalVisible, modalType, isMotion, selectedRowKeys } = statistic
+const Face = ({ location, dispatch, face, loading, room }) => {
+  const { list, pagination, currentItem, modalVisible, modalType, isMotion, selectedRowKeys } = face
   const { pageSize } = pagination
 
   const listProps = {
     dataSource: list,
-    loading: loading.effects['statistic/query'],
+    room,
+    loading: loading.effects['finger/query'],
     pagination,
     location,
     isMotion,
@@ -30,23 +31,24 @@ const Statistic = ({ location, dispatch, statistic, loading }) => {
     },
     onDeleteItem (id) {
       dispatch({
-        type: 'statistic/delete',
+        type: 'finger/delete',
         payload: id,
       })
     },
     onEditItem (item) {
-      dispatch(routerRedux.push({
-        pathname: '/attendance/record',
-        query: {
-          classId: item.classId,
+      dispatch({
+        type: 'finger/showModal',
+        payload: {
+          modalType: 'update',
+          currentItem: item,
         },
-      }))
+      })
     },
     // rowSelection: {
     //   selectedRowKeys,
     //   onChange: (keys) => {
     //     dispatch({
-    //       type: 'statistic/updateState',
+    //       type: 'record/updateState',
     //       payload: {
     //         selectedRowKeys: keys,
     //       },
@@ -57,6 +59,7 @@ const Statistic = ({ location, dispatch, statistic, loading }) => {
 
   const filterProps = {
     isMotion,
+    room,
     filter: {
       ...location.query,
     },
@@ -72,18 +75,18 @@ const Statistic = ({ location, dispatch, statistic, loading }) => {
     },
     onSearch (fieldsValue) {
       fieldsValue.keyword.length ? dispatch(routerRedux.push({
-        pathname: '/attendance/statistic',
+        pathname: '/attendanc/fingerprint',
         query: {
           field: fieldsValue.field,
           keyword: fieldsValue.keyword,
         },
       })) : dispatch(routerRedux.push({
-        pathname: '/attendance/statistic',
+        pathname: '/attendanc/fingerprint',
       }))
     },
     onAdd () {
       dispatch({
-        type: 'statistic/showModal',
+        type: 'finger/showModal',
         payload: {
           modalType: 'create',
         },
@@ -91,7 +94,7 @@ const Statistic = ({ location, dispatch, statistic, loading }) => {
     },
     onDeleteItems () {
       dispatch({
-        type: 'statistic/multiDelete',
+        type: 'finger/multiDelete',
         payload: {
           ids: selectedRowKeys,
         },
@@ -105,27 +108,28 @@ const Statistic = ({ location, dispatch, statistic, loading }) => {
   const modalProps = {
     item: modalType === 'create' ? {} : currentItem,
     width: 1000,
+    room,
     visible: modalVisible,
     maskClosable: false,
-    confirmLoading: loading.effects['statistic/update'],
-    title: `${modalType === 'create' ? '添加课程' : '编辑课程'}`,
+    confirmLoading: loading.effects['record/update'],
+    title: `${modalType === 'create' ? '考勤补录' : '编辑'}`,
     wrapClassName: 'vertical-center-modal',
     onOk (data) {
       dispatch({
-        type: `statistic/${modalType}`,
+        type: `finger/${modalType}`,
         payload: data,
       })
     },
     onCancel () {
       dispatch({
-        type: 'statistic/hideModal',
+        type: 'finger/hideModal',
       })
     },
   }
 
   const handleDeleteItems = () => {
     dispatch({
-      type: 'statistic/multiDelete',
+      type: 'finger/multiDelete',
       payload: {
         ids: selectedRowKeys,
       },
@@ -133,10 +137,11 @@ const Statistic = ({ location, dispatch, statistic, loading }) => {
   }
 
   const ModalGen = () => <Modal {...modalProps} />
+  const FilterGen = () => <Filter {...filterProps} />
 
   return (
     <div className="content-inner">
-      <Filter {...filterProps} />
+      <FilterGen />
       {
         -1 > 0 &&
         <Row style={{ marginBottom: 24, textAlign: 'right', fontSize: 13 }}>
@@ -149,16 +154,18 @@ const Statistic = ({ location, dispatch, statistic, loading }) => {
         </Row>
       }
       <List {...listProps} />
-      {modalVisible && <Modal {...modalProps} />}
+      { // modalVisible && <Modal {...modalProps} />
+      }
     </div>
   )
 }
 
-Statistic.propTypes = {
-  statistic: PropTypes.object,
+Face.propTypes = {
+  face: PropTypes.object,
   location: PropTypes.object,
   dispatch: PropTypes.func,
   loading: PropTypes.object,
+  room: PropTypes.object,
 }
 
-export default connect(({ statistic, loading }) => ({ statistic, loading }))(Statistic)
+export default connect(({ face, loading, room }) => ({ face, loading, room }))(Face)

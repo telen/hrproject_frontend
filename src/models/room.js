@@ -28,7 +28,9 @@ export default modelExtend(pageModel, {
             type: 'query',
             payload: location.query,
           })
-        } else if (location.pathname === '/attendance/record') {
+        } else if (location.pathname === '/attendance/record'
+        || location.pathname === '/attendance/fingerprint'
+        || location.pathname === '/attendance/face') {
           dispatch({
             type: 'query',
             payload: {
@@ -48,7 +50,7 @@ export default modelExtend(pageModel, {
         yield put({
           type: 'querySuccess',
           payload: {
-            list: data.data,
+            list: data.data || [],
             pagination: {
               current: Number(payload.page) || 1,
               pageSize: Number(payload.pageSize) || 10,
