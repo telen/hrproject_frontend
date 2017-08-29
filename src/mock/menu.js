@@ -5,7 +5,7 @@ const mockList = require('./mockList')
 const { apiPrefix } = config
 const hostq = '192.168.199.220:8080'
 const host = '192.168.199.152:8080'
-const enableMock = false
+const enableMock = true
 
 let database = [
   {

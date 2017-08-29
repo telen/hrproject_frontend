@@ -165,7 +165,20 @@ const modal = ({
               </FormItem>
             </Col>
             <Col span={8}>
-              {agencyMenu}
+              <FormItem label="所属机构" hasFeedback {...formItemLayout}>
+                {getFieldDecorator('agencyId', {
+                  initialValue: item.agencyId,
+                  rules: [
+                    {
+                      required: false,
+                    },
+                  ],
+                })(<Select allowClear={true}>
+                  {agentMgt.list.map((itemc) => {
+                    return <Option key={itemc.agencyId} value={itemc.agencyId}>{itemc.agencyName}</Option>
+                  })}
+                </Select>)}
+              </FormItem>
             </Col>
           </Row>
 
