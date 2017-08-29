@@ -52,6 +52,7 @@ const List = ({ onDeleteItem, onEditItem, onPassItem, onRejectItem, isMotion, lo
       dataIndex: 'auditStatus',
       key: 'auditStatus',
       render: (text) => {
+        console.log(text)
         let t = '新建'
         switch (text) {
           case 0:
@@ -82,7 +83,7 @@ const List = ({ onDeleteItem, onEditItem, onPassItem, onRejectItem, isMotion, lo
       render: (text, record) => {
         const drop = <DropOption onMenuClick={e => handleMenuClick(record, e)} menuOptions={[{ key: '1', name: 'Update' }, { key: '2', name: 'Delete' }]} />
         let menu = null
-        if (record.status === 1) {
+        if (record.auditStatus === 1) {
           menu = (
             <div className={styles.menuwrap}>
               <a onClick={(e) => handleMenuClick(record, { key: '1' })}>通过</a>
