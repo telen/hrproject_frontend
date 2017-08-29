@@ -109,7 +109,7 @@ const modal = ({
                   ],
                 })(<Select>
                   <Option value="han">汉族</Option>
-                  <Option value="hui">回族</Option>
+                  <Option value="other">少数民族</Option>
                 </Select>)}
               </FormItem>
             </Col>

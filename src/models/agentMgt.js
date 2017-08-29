@@ -91,7 +91,7 @@ export default modelExtend(pageModel, {
 
     * create ({ payload }, { call, put }) {
       const data = yield call(create, payload)
-      if (data.success) {
+      if (data.code === '000000') {
         yield put({ type: 'hideModal' })
         yield put({ type: 'query' })
       } else {

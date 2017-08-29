@@ -150,7 +150,7 @@ const modal = ({
                   initialValue: item.superiorDepartment,
                   rules: [
                     {
-                      required: false,
+                      required: true,
                     },
                   ],
                 })(<Input />)}

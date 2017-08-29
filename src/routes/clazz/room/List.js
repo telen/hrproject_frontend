@@ -42,8 +42,8 @@ const List = ({ onDeleteItem, onEditItem, onApplyItem, isMotion, location, cours
       key: 'predictedCount',
     }, {
       title: '教师姓名',
-      dataIndex: 'teachername',
-      key: 'teachername',
+      dataIndex: 'teacherName',
+      key: 'teacherName',
     }, {
       title: '所属课程',
       dataIndex: 'courseName',
