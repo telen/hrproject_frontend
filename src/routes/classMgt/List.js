@@ -52,7 +52,6 @@ const List = ({ onDeleteItem, onEditItem, onPassItem, onRejectItem, isMotion, lo
       dataIndex: 'auditStatus',
       key: 'auditStatus',
       render: (text) => {
-        console.log(text)
         let t = '新建'
         switch (text) {
           case 0:

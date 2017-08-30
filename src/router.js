@@ -219,6 +219,7 @@ const Routers = function ({ history, app }) {
           getComponent (nextState, cb) {
             require.ensure([], (require) => {
               registerModel(app, require('models/ledgerCheck'))
+              registerModel(app, require('models/agentMgt'))
               cb(null, require('routes/ledgerCheck/'))
             }, 'ledgerCheck')
           },

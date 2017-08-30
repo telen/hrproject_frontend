@@ -33,8 +33,8 @@ const List = ({ onDeleteItem, onEditItem, onEditItemLedger, isMotion, location, 
       key: 'graduateNumbers',
     }, {
       title: '教师姓名',
-      dataIndex: 'teacher',
-      key: 'teacher',
+      dataIndex: 'teacherName',
+      key: 'teacherName',
     }, {
       title: '课程名称',
       dataIndex: 'courseName',

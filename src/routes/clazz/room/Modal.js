@@ -86,7 +86,7 @@ const modal = ({
       title: '学员性别',
       dataIndex: 'gender',
       key: 'gender',
-      render: text => (<span>{text === '0'
+      render: text => (<span>{text === 0
         ? '男'
         : '女'}</span>),
     }, {

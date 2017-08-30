@@ -7,7 +7,7 @@ import List from './List'
 import Filter from './Filter'
 import Modal from './Modal'
 
-const LedgerCheck = ({ location, dispatch, ledgerCheck, loading }) => {
+const LedgerCheck = ({ location, dispatch, ledgerCheck, loading, agentMgt }) => {
   const { list, pagination, currentItem, modalVisible, modalType, isMotion, selectedRowKeys, currentStudents, selectedRowKeysStudent } = ledgerCheck
   const { pageSize } = pagination
 
@@ -73,6 +73,7 @@ const LedgerCheck = ({ location, dispatch, ledgerCheck, loading }) => {
   }
 
   const filterProps = {
+    agentMgt,
     isMotion,
     filter: {
       ...location.query,
@@ -129,10 +130,9 @@ const LedgerCheck = ({ location, dispatch, ledgerCheck, loading }) => {
     confirmLoading: loading.effects['ledgerCheck/update'],
     title: `${modalType === 'create' ? '添加课程' : '编辑课程'}`,
     wrapClassName: 'vertical-center-modal',
-    onOk (data) {
+    onOk () {
       dispatch({
-        type: `ledgerCheck/${modalType}`,
-        payload: data,
+        type: 'ledgerCheck/hideModal',
       })
     },
     onCancel () {
@@ -181,4 +181,4 @@ LedgerCheck.propTypes = {
   loading: PropTypes.object,
 }
 
-export default connect(({ ledgerCheck, loading }) => ({ ledgerCheck, loading }))(LedgerCheck)
+export default connect(({ ledgerCheck, loading, agentMgt }) => ({ ledgerCheck, loading, agentMgt }))(LedgerCheck)

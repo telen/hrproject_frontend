@@ -45,10 +45,6 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, roleMap, ...tableP
       dataIndex: 'email',
       key: 'email',
     }, {
-      title: '角色id',
-      dataIndex: 'roleId',
-      key: 'roleId',
-    }, {
       title: '角色',
       dataIndex: 'roleName',
       key: 'roleName',
@@ -82,7 +78,6 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, roleMap, ...tableP
         {...tableProps}
         className={classnames({ [styles.table]: true, [styles.motion]: false })}
         bordered
-        scroll={{ x: 1250 }}
         columns={columns}
         simple
         rowKey={record => record.userId}
