@@ -1,9 +1,10 @@
 const APIV1 = '/api'
 const APIV2 = '/api/v2'
-
+// 荆门市劳动就业管理局
+// 培训监管平台
 module.exports = {
-  name: '荆门市劳动就业管理局',
-  namesub: '培训监管平台',
+  name: '',
+  namesub: '',
   prefix: 'antdAdmin',
   footerText: 'Ant Design Admin  © 2017 zuiidea',
   logo: '/logo.png',

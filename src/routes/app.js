@@ -105,7 +105,6 @@ const App = ({ children, dispatch, app, loading, location }) => {
           </div>
         </div>
       </div>
-
     </div>
   )
 }

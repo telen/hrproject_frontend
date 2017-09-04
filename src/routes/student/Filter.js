@@ -80,7 +80,7 @@ const Filter = ({
   return (
     <Row gutter={24} type="flex" justify="space-between">
       <Col {...ColProps} >
-        <Button type="primary" style={{ marginRight: 16 }} icon="plus" onClick={onAdd}>添加用户</Button>
+        <Button type="primary" style={{ marginRight: 16 }} icon="plus" onClick={onAdd}>添加学生</Button>
         <Button icon="delete" style={{ marginRight: 16 }} onClick={onDeleteItems} >批量删除</Button>
         <Button icon="reload" style={{ marginRight: 16 }} onClick={handleSubmit}>刷新</Button>
       </Col>

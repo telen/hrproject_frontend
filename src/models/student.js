@@ -1,4 +1,4 @@
-/* global window */
+/* global window document CertCtl ID100Control */
 import modelExtend from 'dva-model-extend'
 import { config } from 'utils'
 import { create, remove, update, query } from 'services/student'
@@ -14,6 +14,7 @@ export default modelExtend(pageModel, {
 
   state: {
     currentItem: {},
+    deviceIdCardInfo: {}, // 读卡器 身份证信息
     modalVisible: false,
     modalType: 'create',
     selectedRowKeys: [],
@@ -106,6 +107,26 @@ export default modelExtend(pageModel, {
       }
     },
 
+    * readIDCard ({ payload }, { select, call, put }) {
+      const json = CertCtl.ReadCardEx()
+      // console.log('student model,', json, CertCtl)
+      alert(json)
+
+      yield put({ type: 'updateState',
+        payload: {
+          deviceInfo: {
+            idNumber: json.cardno,
+            studentName: json.name,
+            gender: json.sex === '男' ? '0' : '1',
+            nationality: json.nation,
+            birthday: json.birth,
+            registeredResidence: json.address,
+            photo: `data:image/jpg;base64,${json.photo}`,
+          },
+        },
+      })
+    },
+
   },
 
   reducers: {
@@ -115,7 +136,7 @@ export default modelExtend(pageModel, {
     },
 
     hideModal (state) {
-      return { ...state, modalVisible: false }
+      return { ...state, modalVisible: false, deviceInfo: {} }
     },
 
     switchIsMotion (state) {

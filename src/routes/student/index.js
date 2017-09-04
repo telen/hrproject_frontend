@@ -8,7 +8,7 @@ import Filter from './Filter'
 import Modal from './Modal'
 
 const Student = ({ location, dispatch, student, loading, course }) => {
-  const { list, pagination, currentItem, modalVisible, modalType, isMotion, selectedRowKeys } = student
+  const { list, pagination, currentItem, modalVisible, modalType, isMotion, selectedRowKeys, deviceInfo } = student
   const { pageSize } = pagination
 
   const listProps = {
@@ -106,7 +106,7 @@ const Student = ({ location, dispatch, student, loading, course }) => {
   }
 
   const modalProps = {
-    item: modalType === 'create' ? {} : currentItem,
+    item: modalType === 'create' ? deviceInfo : currentItem,
     width: 1000,
     course,
     visible: modalVisible,
@@ -123,6 +123,11 @@ const Student = ({ location, dispatch, student, loading, course }) => {
     onCancel () {
       dispatch({
         type: 'student/hideModal',
+      })
+    },
+    readIDCard () {
+      dispatch({
+        type: 'student/readIDCard',
       })
     },
   }

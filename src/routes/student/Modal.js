@@ -25,6 +25,7 @@ const modal = ({
   item = {},
   onOk,
   course,
+  readIDCard,
   form: {
     getFieldDecorator,
     validateFields,
@@ -57,7 +58,7 @@ const modal = ({
     ...modalProps,
     onOk: handleOk,
   }
-
+console.log(item)
   return (
     <Modal {...modalOpts}>
       <Form layout="horizontal">
@@ -268,7 +269,7 @@ const modal = ({
                 <Button>录入指纹</Button>
               </div>
 
-              <Button type="primary">读取身份证信息</Button>
+              <Button type="primary" onClick={readIDCard}>读取身份证信息</Button>
             </Col>
           </Row>
 
@@ -645,6 +646,7 @@ modal.propTypes = {
   type: PropTypes.string,
   item: PropTypes.object,
   onOk: PropTypes.func,
+  readIDCard: PropTypes.func,
 }
 
 export default Form.create()(modal)

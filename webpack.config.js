@@ -38,14 +38,15 @@ module.exports = (webpackConfig, env) => {
     new HtmlWebpackPlugin({
       hash: true,
       mobile: true,
-      title: 'antd-admin',
+      title: '',
       inject: false,
       appMountId: 'root',
-      template: `!!ejs-loader!${HtmlWebpackTemplate}`,
+      template: 'src/index.ejs',
       filename: env === 'production' ? '../index.html' : 'index.html',
       minify: {
-        collapseWhitespace: true,
+        collapseWhitespace: false,
       },
+      inlineManifestWebpackName: 'webpackManifest',
       scripts: env === 'production' ? null : ['/roadhog.dll.js'],
       meta: [
         {
