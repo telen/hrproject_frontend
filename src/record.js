@@ -1,20 +1,18 @@
 /* global window */
 import modelExtend from 'dva-model-extend'
 import { config } from 'utils'
-import { create, remove, update, query, inspect } from './../../services/room'
-import * as studentService from './../../services/student'
-import { pageModel } from './../common'
+import { create, remove, update, query } from 'services/attendanceRecord'
+import * as usersService from 'services/users'
+import { pageModel } from './common'
 
 // const { query } = usersService
 const { prefix } = config
 
 export default modelExtend(pageModel, {
-  namespace: 'inspectionBefore',
+  namespace: 'record',
 
   state: {
     currentItem: {},
-    currentStudents: [],
-    currentStudent: {},
     modalVisible: false,
     modalType: 'create',
     selectedRowKeys: [],
@@ -24,7 +22,7 @@ export default modelExtend(pageModel, {
   subscriptions: {
     setup ({ dispatch, history }) {
       history.listen((location) => {
-        if (location.pathname === '/inspection/inspectionBefore') {
+        if (location.pathname === '/attendance/record') {
           dispatch({
             type: 'query',
             payload: location.query,
@@ -37,12 +35,13 @@ export default modelExtend(pageModel, {
   effects: {
 
     * query ({ payload = {} }, { call, put }) {
-      const data = yield call(query, { ...payload, ...{ stage: 0 } })
+      const data = yield call(query, payload)
+
       if (data.code === '000000') {
         yield put({
           type: 'querySuccess',
           payload: {
-            list: data.data || [],
+            list: data.data,
             pagination: {
               current: Number(payload.page) || 1,
               pageSize: Number(payload.pageSize) || 10,
@@ -67,7 +66,7 @@ export default modelExtend(pageModel, {
     },
 
     * multiDelete ({ payload }, { call, put }) {
-      const data = yield call(remove, payload)
+      const data = yield call(usersService.remove, payload.ids)
       if (data.code === '000000') {
         yield put({ type: 'updateState', payload: { selectedRowKeys: [] } })
         yield put({ type: 'query' })
@@ -96,37 +95,6 @@ export default modelExtend(pageModel, {
       }
     },
 
-    * queryStudent ({ payload }, { select, call, put }) {
-      const clazz = payload.currentItem
-      const data = yield call(studentService.query, {
-        classId: clazz.classId,
-        agencyId: clazz.agencyId,
-        pageSize: 10000,
-      })
-      if (data.code === '000000') {
-        yield put({
-          type: 'showModal',
-          payload: { ...payload,
-            ...{
-              modalType: 'update',
-              currentStudents: data.data,
-            },
-          },
-        })
-      }
-    },
-
-    * inspect ({ payload }, { call, put }) {
-      const data = yield call(inspect, payload)
-      if (data.code === '000000') {
-        yield put({ type: 'hideModal' })
-        yield put({ type: 'query' })
-      } else {
-        throw data
-      }
-    },
-
-
   },
 
   reducers: {
@@ -136,16 +104,12 @@ export default modelExtend(pageModel, {
     },
 
     hideModal (state) {
-      return { ...state, modalVisible: false, currentStudent: {}, currentStudents: [] }
+      return { ...state, modalVisible: false }
     },
 
     switchIsMotion (state) {
       window.localStorage.setItem(`${prefix}userIsMotion`, !state.isMotion)
       return { ...state, isMotion: !state.isMotion }
-    },
-
-    showStudent (state, { payload }) {
-      return { ...state, ...payload }
     },
 
   },
