@@ -38,11 +38,16 @@ export default modelExtend(pageModel, {
 
     * query ({ payload = {} }, { call, put }) {
       const data = yield call(query, { ...payload, ...{ stage: 2 } })
+      // 过滤掉未通过审核的班级
+      const list = data.data && data.data.filter((item) => {
+        return item.status === 2
+      })
+      
       if (data.code === '000000') {
         yield put({
           type: 'querySuccess',
           payload: {
-            list: data.data || [],
+            list: list || [],
             pagination: {
               current: Number(payload.page) || 1,
               pageSize: Number(payload.pageSize) || 10,
@@ -97,9 +102,10 @@ export default modelExtend(pageModel, {
     },
 
     * queryStudent ({ payload }, { select, call, put }) {
+      const clazz = payload.currentItem
       const data = yield call(studentService.query, {
-        classId: payload.classId,
-        agencyId: payload.agencyId,
+        classId: clazz.classId,
+        agencyId: clazz.agencyId,
         pageSize: 10000,
       })
       if (data.code === '000000') {

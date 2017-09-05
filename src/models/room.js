@@ -35,6 +35,7 @@ export default modelExtend(pageModel, {
             type: 'query',
             payload: {
               pageSize: 10000,
+              filtered: 2,
             },
           })
         }
@@ -46,11 +47,18 @@ export default modelExtend(pageModel, {
 
     * query ({ payload = {} }, { call, put }) {
       const data = yield call(query, payload)
+      console.log(payload)
       if (data.code === '000000') {
+        let list = data.data
+        if (payload.filtered === 2) {
+          list = data.data.filter((item) => {
+            return item.status === 2
+          })
+        }
         yield put({
           type: 'querySuccess',
           payload: {
-            list: data.data || [],
+            list: list || [],
             pagination: {
               current: Number(payload.page) || 1,
               pageSize: Number(payload.pageSize) || 10,

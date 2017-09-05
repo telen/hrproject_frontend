@@ -1,6 +1,6 @@
 /* global window */
 import modelExtend from 'dva-model-extend'
-import { config } from 'utils'
+import { config, initUsbKey, validateUsbKey } from 'utils'
 import { create, remove, update, query } from 'services/account'
 import * as usersService from 'services/users'
 import { pageModel } from './common'
@@ -89,6 +89,8 @@ export default modelExtend(pageModel, {
 
     * create ({ payload }, { call, put }) {
       const data = yield call(create, payload)
+      // TODO usbkey init
+      // initUsbKey(payload)
       if (data.code === '000000') {
         yield put({ type: 'hideModal' })
         yield put({ type: 'query' })

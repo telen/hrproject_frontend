@@ -132,6 +132,7 @@ const Ledger = ({ location, dispatch, ledger, loading }) => {
       })
     },
     onLedgerOk (data) {
+      console.log(data)
       dispatch({
         type: `ledger/${modalType}`,
         payload: data,
@@ -158,6 +159,7 @@ const Ledger = ({ location, dispatch, ledger, loading }) => {
           })
         },
       },
+      footer: null,
     },
   } : modalProps
 

@@ -55,10 +55,16 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, room, ...tableProp
       title: '上课打卡时间',
       dataIndex: 'startTime',
       key: 'startTime',
+      render: (text, record) => {
+        return record.status === 4 || record.status === 1 ? '-- --' : text
+      },
     }, {
       title: '下课打卡时间',
       dataIndex: 'endTime',
       key: 'endTime',
+      render: (text, record) => {
+        return record.status === 4 || record.status === 1 ? '-- --' : text
+      },
     }, {
       title: '本次考勤状态',
       dataIndex: 'status',
@@ -70,7 +76,7 @@ const List = ({ onDeleteItem, onEditItem, isMotion, location, room, ...tableProp
             label = '正常'
             break
           case 1:
-            label = '请加'
+            label = '请假'
             break
           case 2:
             label = '迟到'

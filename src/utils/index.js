@@ -99,6 +99,28 @@ const arrayToTree = (array, id = 'id', pid = 'pid', children = 'children') => {
   return result
 }
 
+/**
+ * 设置 usbkey
+ */
+const initUsbKey = ({ info0, info1, info2, info3, info4, info5 }) => {
+  const NewObj = new ActiveXObject("UsbKeyJm.UsbKeyX")
+
+  NewObj.Get_uk_info(0) //usbkey序号
+  NewObj.Get_uk_info(1) //用户名
+  NewObj.Get_uk_info(2) //密码
+  NewObj.Get_uk_info(3) //培训机构代码
+  NewObj.Get_uk_info(5) //用户类型
+  NewObj.Get_uk_info(4) //用户权限
+}
+
+const validateUsbKey = ({ account, password }) => {
+  const NewObj = new ActiveXObject("UsbKeyJm.UsbKeyX")
+
+  const keyAccount =  NewObj.Get_uk_info(1) //用户名
+  const keyPassword = NewObj.Get_uk_info(2) //密码
+  return (account === keyAccount && password === keyPassword)
+}
+
 module.exports = {
   config,
   request,
@@ -107,4 +129,6 @@ module.exports = {
   queryURL,
   queryArray,
   arrayToTree,
+  initUsbKey,
+  validateUsbKey,
 }

@@ -143,19 +143,22 @@ module.exports = {
         })
         // res.json({ success: true, message: 'Ok' })
         res.status(200).json({
-              "code": "000000",
-              "message": "用户登录成功",
-              "data": {
-              "userId": "17081610203221032122",
-              "userName": "Mr.Monkey",
-              "role": "admin",
-              "authorityList": [
-                "17081610203221032567"
-                ]
-              }
-            })
+          code: '000000',
+          message: '用户登录成功',
+          data: {
+            userId: '17081610203221032122',
+            userName: 'Mr.Monkey',
+            role: 'admin',
+            authorityList: [
+              '17081610203221032567',
+            ],
+          },
+        })
       } else {
-        res.status(400).end()
+        res.status(200).json({
+          code: '000001',
+          message: '密码错误',
+        })
       }
     } else {
       axios.defaults.headers.Cookie = req.headers.cookie

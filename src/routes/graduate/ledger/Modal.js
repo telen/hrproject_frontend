@@ -61,7 +61,7 @@ const modal = ({
         onOk(dataF)
       } else {
         dataF.graduateList = selectedRowKeysStudent
-        onLedgerOk(data)
+        onLedgerOk(dataF)
       }
     })
   }
